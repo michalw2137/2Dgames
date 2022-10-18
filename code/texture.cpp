@@ -4,26 +4,16 @@
 #include "globals.h"
 
 Texture::Texture() {
-	pTexture = NULL;
+	this->pTexture = NULL;
 
-	pWidth = 0;
-	pHeight = 0;
+	this->acceleration = 0;
 
-	pXPosition = 0;
-	pYPosition = 0;
-
-	pXVelocity = 0;
-	pYVelocity = 0;
-
-	pXTargetVelocity = 0;
-	pYTargetVelocity = 0;
-
-	pTargetX = 0;
-	pTargetY = 0;
-
-	acceleration = 0;
-
-	pRenderRect = { 0, 0, 0, 0 };
+	this->pRenderRect = { 0, 0, 0, 0 };
+	this->pSize = { 0, 0 };
+	this->pPosition = { 0, 0 };
+	this->pVelocity = { 0, 0 };
+	this->pTargetVelocity = { 0, 0 };
+	this->pTargetPosition = { 0,0 };
 }
 
 Texture::~Texture() {
@@ -39,9 +29,8 @@ void Texture::free() {
 		return;
 	}
 	SDL_DestroyTexture(pTexture);
-	pTexture = NULL;
-	pWidth = 0;
-	pHeight = 0;
+	this->pTexture = NULL;
+	this->pSize = {0, 0};
 }
 
 bool Texture::loadFromFile(std::string path) {
@@ -55,147 +44,74 @@ bool Texture::loadFromFile(std::string path) {
 
 	SDL_SetColorKey(tempSurface, SDL_TRUE, SDL_MapRGB(tempSurface->format, 0xFF, 0xFF, 0xFF));
 
-	pTexture = SDL_CreateTextureFromSurface(gRenderer, tempSurface);
-	if (pTexture == NULL) {
+	this->pTexture = SDL_CreateTextureFromSurface(gRenderer, tempSurface);
+	if (this->pTexture == NULL) {
 		printf("Unable to load image %s! SDL_image Error: %s\n", path.c_str(), IMG_GetError());
 		return false;
 	}
 
-	pWidth = tempSurface->w;
-	pHeight = tempSurface->h;
+	this->pSize.x = tempSurface->w;
+	this->pSize.y = tempSurface->h;
 
-	pRenderRect.w = pWidth;
-	pRenderRect.h = pHeight;
+	this->pRenderRect.w = this->pSize.x;
+	this->pRenderRect.h = this->pSize.x;
 
 	SDL_FreeSurface(tempSurface);
 	return true;
 }
 
 void Texture::render() {
-	pRenderRect.x = int(pXPosition);
-	pRenderRect.y = int(pYPosition);
-	SDL_RenderCopy(gRenderer, pTexture, NULL, &pRenderRect);
-	//SDL_Renderer, SDL_Texture, NULL, SDL_Rect
-									//{ x, y, width, height}
-//std::cout << pRenderRect.x << " " << pRenderRect.y << " " << pRenderRect.w << " " << pRenderRect.h << "\n";
-}
-
-void Texture::setPosition(double x, double y) {
-	pXPosition = x;
-	pYPosition = y;
-}
-
-void Texture::setAcceleration(double a) {
-	acceleration = a;
-}
-
-int Texture::getHeight() {
-	return pHeight;
-}
-
-void Texture::setXVelocity(double velocity) {
-	pXVelocity = velocity;
-}
-
-void Texture::setYVelocity(double velocity) {
-	pYVelocity = velocity;
-}
-
-void Texture::setXTargetVelocity(double velocity) {
-	pXTargetVelocity = velocity;
-}
-
-void Texture::setYTargetVelocity(double velocity) {
-	pYTargetVelocity = velocity;
-}
-
-void Texture::move() {
-	/*if (pXPosition + pXVelocity <= 0 || pXPosition + pXVelocity + pWidth >= WIDTH) {
-		pXVelocity *= -1;
-	}
-	if (pYPosition + pYVelocity <= 0 || pYPosition + pYVelocity + pHeight >= HEIGHT) {
-		pYVelocity *= -1;
-	}*/
-	pXPosition += pXVelocity;
-	pYPosition += pYVelocity;
+	this->pRenderRect.x = int(this->pPosition.x);
+	this->pRenderRect.y = int(this->pPosition.y);
+	SDL_RenderCopy(gRenderer, this->pTexture, NULL, &this->pRenderRect);
 }
 
 void Texture::accelerate() {
-	pXVelocity = pXVelocity * acceleration + pXTargetVelocity * (1 - acceleration);
-	pYVelocity = pYVelocity * acceleration + pYTargetVelocity * (1 - acceleration);
-}
-
-void Texture::setAlpha(Uint8 alpha) {
-	//Modulate texture alpha
-	SDL_SetTextureAlphaMod(pTexture, alpha);
-}
-
-int Texture::getWidth() {
-	return pWidth;
-}
-
-int Texture::getXPosition() {
-	return pXPosition;
-}
-
-int Texture::getYPosition() {
-	return pYPosition;
-}
-
-double Texture::getXVelocity() {
-	return pXVelocity;
-}
-
-double Texture::getYVelocity() {
-	return pYVelocity;
-}
-
-SDL_Texture* Texture::getTexture() {
-	return pTexture;
-}
-
-void Texture::setTarget(double x, double y) {
-	pTargetX = x;
-	pTargetY = y;
+	this->pVelocity.x = this->pVelocity.x * acceleration + this->pTargetVelocity.x * (1 - acceleration);
+	this->pVelocity.y = this->pVelocity.y * acceleration + this->pTargetVelocity.y * (1 - acceleration);
 }
 
 void Texture::accelerateTowardsTarget() {
-	pXVelocity = (pTargetX - pXPosition - pWidth/2) / 20;
-	pYVelocity = (pTargetY - pYPosition - pHeight / 2) / 20;
+	this->pVelocity.x = (this->pTargetPosition.x - this->pPosition.x - (this->pSize.x / 2.)) / 20.;
+	this->pVelocity.y = (this->pTargetPosition.y - this->pPosition.y - (this->pSize.y / 2.)) / 20.;
+}
+
+void Texture::move() {
+	this->pPosition.x += this->pVelocity.x;
+	this->pPosition.y += this->pVelocity.y;
 }
 
 void Texture::buttonDown(SDL_Event* e, double speed) {
 	switch (e->key.keysym.sym) {
-		case SDLK_UP:
-			if (pYTargetVelocity != -speed)
-				printf("UP \n");
-			setYTargetVelocity(-speed);
+	case SDLK_UP:
+		if (e->key.repeat == 0) {
+			printf("UP \n");
+		}
+		this->pTargetVelocity.y = -speed;
+		break;
 
-			break;
+	case SDLK_DOWN:
+		if (e->key.repeat == 0) {
+			printf("DOWN \n");
+		}
+		this->pTargetVelocity.y = speed;
+		break;
 
-		case SDLK_DOWN:
-			if (pYTargetVelocity != speed)
-				printf("DOWN \n");
-			setYTargetVelocity(speed);
+	case SDLK_LEFT:
+		if (e->key.repeat == 0) {
+			printf("LEFT \n");
+		}
+		this->pTargetVelocity.x = -speed;
+		break;
 
-			break;
+	case SDLK_RIGHT:
+		if (e->key.repeat == 0) {
+			printf("RIGHT \n");
+		}
+		this->pTargetVelocity.x = speed;
+		break;
 
-		case SDLK_LEFT:
-			if (pXTargetVelocity != -speed)
-				printf("LEFT \n");
-			setXTargetVelocity(-speed);
-
-			break;
-
-		case SDLK_RIGHT:
-			if (pXTargetVelocity != speed)
-				printf("RIGHT \n");
-			setXTargetVelocity(speed);
-
-			break;
-
-		default:
-			break;
+	default: break;
 	}
 }
 
@@ -203,30 +119,68 @@ void Texture::buttonUp(SDL_Event* e) {
 	switch (e->key.keysym.sym) {
 	case SDLK_UP:
 		printf("UP released \n");
-		setYTargetVelocity(0);
-
+		this->pTargetVelocity.y = 0;
 		break;
 
 	case SDLK_DOWN:
 		printf("DOWN released \n");
-		setYTargetVelocity(0);
-
+		this->pTargetVelocity.y = 0;
 		break;
 
 	case SDLK_LEFT:
 		printf("LEFT released \n");
-		setXTargetVelocity(0);
-
+		this->pTargetVelocity.x = 0;
 		break;
 
 	case SDLK_RIGHT:
 		printf("RIGHT released \n");
-		setXTargetVelocity(0);
-
+		this->pTargetVelocity.x = 0;
 		break;
 
-	default:
-		break;
+	default: break;
 	}
 }
+
+void Texture::setAlpha(Uint8 alpha) {
+	SDL_SetTextureAlphaMod(pTexture, alpha);
+}
+
+void Texture::setTargetPosition(double x, double y) {
+	this->pTargetPosition.x = x;
+	this->pTargetPosition.y = y;
+}
+
+void Texture::setPosition(double x, double y) {
+	this->pPosition = { x, y };
+}
+
+void Texture::setAcceleration(double a) {
+	acceleration = a;
+}
+
+Vector Texture::getSize() {
+	return this->pSize;
+}
+
+Vector Texture::getPosition() {
+	return this->pPosition;
+}
+
+Vector Texture::getTargetPosition() {
+	return this->pTargetPosition;
+}
+
+Vector Texture::getVelocity() {
+	return this->pVelocity;
+}
+
+Vector Texture::getTargetVelocity() {
+	return this->pTargetVelocity;
+}
+
+SDL_Texture* Texture::getTexture() {
+	return pTexture;
+}
+
+
 

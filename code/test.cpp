@@ -19,14 +19,11 @@ enum codes {
 
 Texture squareSprite;
 Texture circleSprite;
-SDL_Texture* test = NULL;
 
 bool initSDL();
 void clean();
 bool loadTextures();
 SDL_Texture* loadTexture(std::string path);
-
-
 
 int main(int argc, char* args[]) {
 	printf("hello world! \n");
@@ -46,65 +43,69 @@ int main(int argc, char* args[]) {
 
 	circleSprite.setAlpha(255/2);
 
-	squareSprite.setPosition(WIDTH / 2., HEIGHT / 2.);
-	circleSprite.setPosition(WIDTH / 2., HEIGHT / 2.);
+	squareSprite.setPosition( WIDTH / 2., HEIGHT / 2. );
+	squareSprite.setAcceleration(0.5);
+
+	circleSprite.setPosition( WIDTH / 2., HEIGHT / 2. );
+	circleSprite.setTargetPosition( WIDTH / 2. - circleSprite.getSize().x, HEIGHT / 2. - circleSprite.getSize().y );
+	double speed = 10;
 
 
 	int mouseX = 0, mouseY = 0;
 	bool mousePressed = false;
 
-	squareSprite.setAcceleration(0.5);
-	double speed = 10;
-
 	SDL_Event e;
 	while (true) {
+	// EVENTS
 		while (SDL_PollEvent(&e) != 0) {
-			if (mousePressed) {
-				SDL_GetMouseState(&mouseX, &mouseY);
-			}
-
 			switch (e.type) {
-			case SDL_QUIT:
-				return SUCCESS;
+				case SDL_QUIT:
+					return SUCCESS;
 
-			case SDL_MOUSEBUTTONDOWN:
-				mousePressed = true;
-				printf("MOUSE PRESSED \n");
-				break;
+				case SDL_MOUSEBUTTONDOWN:
+					mousePressed = true;
+					printf("MOUSE PRESSED at (%i, %i)\n", mouseX,mouseY);
+					break;
 
-			case SDL_MOUSEBUTTONUP:
-				mousePressed = false;
-				printf("MOUSE LET GO \n");
-				break;
+				case SDL_MOUSEBUTTONUP:
+					mousePressed = false;
+					printf("MOUSE LET GO at (%i, %i)\n", mouseX, mouseY);
+					break;
 
-			case SDL_KEYDOWN:
-				squareSprite.buttonDown(&e, speed);
-				break;
+				case SDL_KEYDOWN:
+					squareSprite.buttonDown(&e, speed);
+					break;
 
-			case SDL_KEYUP:
-				squareSprite.buttonUp(&e);
-			}	
+				case SDL_KEYUP:
+					squareSprite.buttonUp(&e);
+				}	
 		}
-		
-		circleSprite.setTarget(mouseX, mouseY);
-
-		SDL_RenderClear(gRenderer);
-
-		if (abs(squareSprite.getXVelocity()) > 0.001 && abs(squareSprite.getXVelocity()) + 0.001 < speed) {
-			printf("changing X speed = %F \n", squareSprite.getXVelocity());
+	// LOGIC AND MOVEMENT
+		if (mousePressed) {
+			SDL_GetMouseState(&mouseX, &mouseY);
+			circleSprite.setTargetPosition(mouseX, mouseY);
 		}
+
 		squareSprite.accelerate();
 		squareSprite.move();
 		
-
 		circleSprite.accelerateTowardsTarget();
 		circleSprite.move();
 		
+
+	// RENDERING
+		SDL_RenderClear(gRenderer);
 
 		squareSprite.render();
 		circleSprite.render();
 
 		SDL_RenderPresent(gRenderer);
+
+
+	// CONSOLE OUTPUT
+		if (abs(squareSprite.getVelocity().x) > 0.1 && abs(squareSprite.getVelocity().x) + 0.1 < speed) {
+			printf("x vel = %F \n", squareSprite.getVelocity().x);
+		}
 
 	}
 
@@ -118,7 +119,7 @@ bool initSDL() {
 		return false;
 	}
 
-	gWindow = SDL_CreateWindow("zadanie 1", 100, 100, WIDTH, HEIGHT, SDL_WINDOW_SHOWN);
+	gWindow = SDL_CreateWindow("zadanie 2", 100, 100, WIDTH, HEIGHT, SDL_WINDOW_SHOWN);
 	if (gWindow == NULL) {
 		printf("Window could not be created! SDL Error: %s\n", SDL_GetError());
 		return false;
