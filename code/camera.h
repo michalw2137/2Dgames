@@ -8,11 +8,6 @@ public:
 
 	~Camera();
 
-	void positionInMiddle(double x, double y, double width, double height);
-
-	void keepInBounds();
-
-
 private:
 	void setX(double x);
 	void setY(double y);

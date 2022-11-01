@@ -102,7 +102,6 @@ int main(int argc, char* args[]) {
 		camera.accelerateTowardsTarget();
 		camera.move();
 		//printf("%F %F \n", camera.getPosition().x, camera.getPosition().y);
-		camera.keepInBounds();
 
 		
 
