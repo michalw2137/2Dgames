@@ -96,10 +96,12 @@ int main(int argc, char* args[]) {
 		squareSprite.move();
 
 
-		camera.positionInMiddle(squareSprite.getPosition().x + 10 * squareSprite.getVelocity().x, 
-								squareSprite.getPosition().y + 10 * squareSprite.getVelocity().y,
-								squareSprite.getSize().x, 
-								squareSprite.getSize().y);
+
+		camera.setTargetPosition(squareSprite.getPosition().x + 10 * squareSprite.getVelocity().x,
+								squareSprite.getPosition().y + 10 * squareSprite.getVelocity().y);
+		camera.accelerateTowardsTarget();
+		camera.move();
+		//printf("%F %F \n", camera.getPosition().x, camera.getPosition().y);
 		camera.keepInBounds();
 
 		

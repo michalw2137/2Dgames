@@ -2,10 +2,7 @@
 #include "globals.h"
 
 Camera::Camera() {
-	this->width = WINDOW_WIDTH;
-	this->height = WINDOW_HEIGHT;
-	this->x = 0;
-	this->y = 0;
+	this->setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 }
 
 Camera::~Camera() {
@@ -13,32 +10,38 @@ Camera::~Camera() {
 }
 
 void Camera::positionInMiddle(double x, double y, double width, double height) {
-	this->x = (x + width / 2.0f) - WINDOW_WIDTH / 2.0f;
-	this->y = (y + height / 2.0f) - WINDOW_HEIGHT / 2.0f;
+	double tempX = (x + width / 2.0f) - WINDOW_WIDTH / 2.0f;
+	double tempY = (y + height / 2.0f) - WINDOW_HEIGHT / 2.0f;
+	this->setPosition(tempX, tempY);
 }
 
 
 void Camera::keepInBounds() {
-	if (this->x < 0)
+	if (this->getPosition().x < 0)
 	{	
-		this->x = 0;
+		this->setX(0);
 	}	
-	if (this->y < 0)
+	if (this->getPosition().y < 0)
 	{	
-		this->y = 0;
+		this->setY(0);
+	}
+	if (this->getPosition().x > LEVEL_WIDTH - this->getSize().x)
+	{	
+		this->setX(LEVEL_WIDTH - this->getSize().x);
 	}	
-	if (this->x > LEVEL_WIDTH - this->width)
+	if (this->getPosition().y > LEVEL_HEIGHT - this->getSize().y)
 	{	
-		this->x = LEVEL_WIDTH - this->width;
-	}	
-	if (this->y > LEVEL_HEIGHT - this->height)
-	{	
-		this->y = LEVEL_HEIGHT - this->height;
+		this->setX(LEVEL_HEIGHT - this->getSize().y);
 	}
 }
 
-Vector Camera::getPosition()
+void Camera::setX(double x)
 {
-	return {this->x, this->y};
+	this->setPosition(x, this->getPosition().y);
+}
+
+void Camera::setY(double y)
+{
+	this->setPosition(this->getPosition().x, y);
 }
 

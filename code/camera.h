@@ -1,7 +1,8 @@
 #pragma once
 #include "globals.h"
+#include "movable.h"
 
-class Camera {
+class Camera : public Movable{
 public:
 	Camera();
 
@@ -11,13 +12,8 @@ public:
 
 	void keepInBounds();
 
-	Vector getPosition();
 
 private:
-
-	double width;
-	double height;
-
-	double x;
-	double y;
+	void setX(double x);
+	void setY(double y);
 };
