@@ -58,10 +58,10 @@ bool Texture::loadFromFile(std::string path) {
 }
 
 void Texture::render(double x, double y, Camera* camera) {
-	SDL_Rect tempRenderRect = { x - camera->getPosition().x, 
-								y - camera->getPosition().y,
-								this->pSize.x, 
-								this->pSize.y};
+	SDL_Rect tempRenderRect = { x * camera->getScale() - camera->getPosition().x,
+								y * camera->getScale() - camera->getPosition().y,
+								this->pSize.x * camera->getScale(),
+								this->pSize.y * camera->getScale()};
 	//printf("rendering at (%i, %i) texture size [%i, %i] \n", this->pRenderRect.x, this->pRenderRect.y, this->pRenderRect.w, this->pRenderRect.h);
 
 	SDL_RenderCopy(gRenderer, this->pTexture, NULL, &tempRenderRect);

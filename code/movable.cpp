@@ -30,8 +30,12 @@ void Movable::accelerate() {
 }
 
 void Movable::accelerateTowardsTarget() {
+	printf("camera position: (%F, %F) \n", pPosition.x, pPosition.y);
+	printf("camera target: (%F, %F) \n", pTargetPosition.x, pTargetPosition.y);
 	this->pVelocity.x = (this->pTargetPosition.x - this->pPosition.x - (this->pSize.x / 2.)) / 20.;
 	this->pVelocity.y = (this->pTargetPosition.y - this->pPosition.y - (this->pSize.y / 2.)) / 20.;
+	printf("camera speed: (%F, %F) \n\n", pVelocity.x, pVelocity.y);
+
 }
 
 void Movable::move() {
@@ -61,30 +65,30 @@ void Movable::move() {
 void Movable::buttonDown(SDL_Event* e, double speed) {
 	switch (e->key.keysym.sym) {
 	case SDLK_UP:
-		if (e->key.repeat == 0) {
+		/*if (e->key.repeat == 0) {
 			printf("UP \n");
-		}
+		}*/
 		this->pTargetVelocity.y = -speed;
 		break;
 
 	case SDLK_DOWN:
-		if (e->key.repeat == 0) {
+		/*if (e->key.repeat == 0) {
 			printf("DOWN \n");
-		}
+		}*/
 		this->pTargetVelocity.y = speed;
 		break;
 
 	case SDLK_LEFT:
-		if (e->key.repeat == 0) {
+		/*if (e->key.repeat == 0) {
 			printf("LEFT \n");
-		}
+		}*/
 		this->pTargetVelocity.x = -speed;
 		break;
 
 	case SDLK_RIGHT:
-		if (e->key.repeat == 0) {
+		/*if (e->key.repeat == 0) {
 			printf("RIGHT \n");
-		}
+		}*/
 		this->pTargetVelocity.x = speed;
 		break;
 
@@ -95,22 +99,22 @@ void Movable::buttonDown(SDL_Event* e, double speed) {
 void Movable::buttonUp(SDL_Event* e) {
 	switch (e->key.keysym.sym) {
 	case SDLK_UP:
-		printf("UP released \n");
+		//printf("UP released \n");
 		this->pTargetVelocity.y = 0;
 		break;
 
 	case SDLK_DOWN:
-		printf("DOWN released \n");
+		//printf("DOWN released \n");
 		this->pTargetVelocity.y = 0;
 		break;
 
 	case SDLK_LEFT:
-		printf("LEFT released \n");
+		//printf("LEFT released \n");
 		this->pTargetVelocity.x = 0;
 		break;
 
 	case SDLK_RIGHT:
-		printf("RIGHT released \n");
+		//printf("RIGHT released \n");
 		this->pTargetVelocity.x = 0;
 		break;
 
@@ -126,6 +130,11 @@ void Movable::setTargetPosition(double x, double y) {
 
 void Movable::setAcceleration(double a) {
 	acceleration = a;
+}
+
+void Movable::setVelocity(double x, double y)
+{
+	this->pVelocity = { x, y };
 }
 
 void Movable::setPosition(double x, double y) {

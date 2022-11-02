@@ -29,6 +29,8 @@ public:
 
 	void setAcceleration(double a);
 
+	void setVelocity(double x, double y);
+
 	//getters
 	Vector getSize();
 

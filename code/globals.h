@@ -6,8 +6,8 @@ extern SDL_Renderer* gRenderer;
 const int WINDOW_HEIGHT = 600;
 const int WINDOW_WIDTH = 600;
 
-const int LEVEL_HEIGHT = 1200;
-const int LEVEL_WIDTH = 1200;
+const int LEVEL_HEIGHT = 2400;
+const int LEVEL_WIDTH = 2400;
 
 const int SCREEN_FPS = 60;
 const int SCREEN_TICKS_PER_FRAME = 1000 / SCREEN_FPS;

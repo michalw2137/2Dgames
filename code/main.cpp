@@ -13,7 +13,10 @@ SDL_Window* gWindow = NULL;
 SDL_Renderer* gRenderer = NULL;
 
 Camera camera;
-Sprite squareSprite;
+
+Sprite sonic;
+Sprite eggman;
+
 //Texture circleSprite;
 
 Level level;
@@ -41,11 +44,19 @@ int main(int argc, char* args[]) {
 
 
 	//circleSprite.setAlpha(255/2);
+	camera.setScale(1);
+	camera.setTargetScale(1);
 
-	squareSprite.setPosition( WINDOW_WIDTH / 2., WINDOW_HEIGHT / 2. );
-	squareSprite.setSize(10, 10);
-	squareSprite.getTexture()->setSize(10, 10);
-	squareSprite.setAcceleration(0.1);
+
+	sonic.setPosition( WINDOW_WIDTH / 2., WINDOW_HEIGHT / 2. );
+	sonic.setSize(100, 100);
+	sonic.getTexture()->setSize(100, 100);
+	sonic.setAcceleration(0.1);
+
+	eggman.setPosition(WINDOW_WIDTH, WINDOW_HEIGHT);
+	eggman.setSize(100, 100);
+	eggman.getTexture()->setSize(100, 100);
+	eggman.setAcceleration(0.1);
 
 	//circleSprite.setPosition( WINDOW_WIDTH / 2., WINDOW_HEIGHT / 2. );
 	//circleSprite.setTargetPosition( WINDOW_WIDTH / 2. - circleSprite.getSize().x, WINDOW_HEIGHT / 2. - circleSprite.getSize().y );
@@ -65,21 +76,21 @@ int main(int argc, char* args[]) {
 
 			case SDL_MOUSEBUTTONDOWN:
 				mousePressed = true;
-				printf("MOUSE PRESSED at (%i, %i)\n", mouseX, mouseY);
+				//printf("MOUSE PRESSED at (%i, %i)\n", mouseX, mouseY);
 				break;
 
 			case SDL_MOUSEBUTTONUP:
 				mousePressed = false;
-				printf("MOUSE LET GO at (%i, %i)\n", mouseX, mouseY);
+				//printf("MOUSE LET GO at (%i, %i)\n", mouseX, mouseY);
 				break;
 
 			case SDL_KEYDOWN:
-				squareSprite.buttonDown(&e, speed);
+				sonic.buttonDown(&e, speed);
 
 				break;
 
 			case SDL_KEYUP:
-				squareSprite.buttonUp(&e);
+				sonic.buttonUp(&e);
 
 
 			}
@@ -89,18 +100,48 @@ int main(int argc, char* args[]) {
 
 		if (mousePressed) {
 			SDL_GetMouseState(&mouseX, &mouseY);
-			//circleSprite.setTargetPosition(mouseX, mouseY);
+			eggman.setTargetPosition(mouseX / camera.getScale() + camera.getPosition().x / camera.getScale(),
+									mouseY / camera.getScale() + camera.getPosition().y / camera.getScale());
+			printf("target [%F, %F] \n", mouseX / camera.getScale() + camera.getPosition().x / camera.getScale(),
+									mouseY / camera.getScale() + camera.getPosition().y) / camera.getScale();
 		}
 
-		squareSprite.accelerate();
-		squareSprite.move();
+		sonic.accelerate();
+		sonic.move(&camera);
+
+		eggman.accelerateTowardsTarget();
+		eggman.move(&camera);
 
 
+		if (camera.getScale() == 1) {
+			if (sonic.distance(&eggman) > WINDOW_WIDTH) {
+				camera.setTargetScale(0.5);
+				printf("zooooooooooooooming out \n");
+			}
+			else {
+			}
+		}
+		
+		if (camera.getScale() != camera.getTargetScale()) {
+			camera.zoom(0.1);
+		} 
+		if (camera.getScale() == 0.5) {
+			camera.setScale(0.5);
+		}
+		
 
-		camera.setTargetPosition(squareSprite.getPosition().x + 10 * squareSprite.getVelocity().x,
-								squareSprite.getPosition().y + 10 * squareSprite.getVelocity().y);
+
+		// CAMERA
+		/*camera.setTargetPosition(sonic.getPosition().x + 10 * sonic.getVelocity().x,
+								sonic.getPosition().y + 10 * sonic.getVelocity().y);
+		camera.accelerateTowardsTarget();*/
+		camera.setTargetPosition((sonic.getPosition().x + eggman.getPosition().x) / 2.0f - camera.getSize().x,
+							(sonic.getPosition().y + eggman.getPosition().y) / 2.0f - camera.getSize().y);
+		camera.setVelocity(0, 0);
 		camera.accelerateTowardsTarget();
 		camera.move();
+		//camera.setPosition(sonic.getPosition().x, sonic.getPosition().y);
+		//camera.move();
 		//printf("%F %F \n", camera.getPosition().x, camera.getPosition().y);
 
 		
@@ -110,16 +151,17 @@ int main(int argc, char* args[]) {
 		SDL_RenderClear(gRenderer);
 
 		level.renderLevel(&camera);
-		squareSprite.render(&camera);
+		sonic.render(&camera);
+		eggman.render(&camera);
 		//circleSprite.render();
 
 		SDL_RenderPresent(gRenderer);
 
 
 		// CONSOLE OUTPUT
-		if (abs(squareSprite.getVelocity().x) > 0.1 && abs(squareSprite.getVelocity().x) + 0.1 < speed) {
+		/*if (abs(squareSprite.getVelocity().x) > 0.1 && abs(squareSprite.getVelocity().x) + 0.1 < speed) {
 			printf("x vel = %F \n", squareSprite.getVelocity().x);
-		}
+		}*/
 
 	}
 
@@ -156,7 +198,8 @@ bool initSDL() {
 }
 
 void clean() {
-	squareSprite.free();
+	sonic.free();
+	eggman.free();
 	//circleSprite.free();
 
 	SDL_DestroyRenderer(gRenderer);
@@ -173,11 +216,14 @@ void clean() {
 
 
 bool loadTextures() {
-	if (!squareSprite.loadTexture("textures/texture1.png")) {
+	if (!sonic.loadTexture("textures/texture1.png")) {
 		printf("Failed to load texture1.png!\n");
 		return false;
 	}
-
+	if (!eggman.loadTexture("textures/texture2.png")) {
+		printf("Failed to load texture1.png!\n");
+		return false;
+	}
 	/*if (!circleSprite.loadFromFile("textures/texture2.png")) {
 		printf("Failed to load texture2.png!\n");
 		return false;
