@@ -12,9 +12,13 @@ public:
 	void render(Camera* camera);
 	void move(Camera* camera);
 
+	void size(double x, double y);
 	Texture* getTexture();
 
 	double distance(Sprite* other);
+
+	void setVelocityX(double x);
+	void setVelocityY(double y);
 
 private:
 	Texture texture;

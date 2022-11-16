@@ -3,6 +3,8 @@
 
 extern SDL_Renderer* gRenderer;
 
+const int CIRCLES_COUNT = 4;
+
 const int WINDOW_HEIGHT = 600;
 const int WINDOW_WIDTH = 600;
 

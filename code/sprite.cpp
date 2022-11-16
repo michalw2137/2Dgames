@@ -6,9 +6,9 @@ bool Sprite::loadTexture(std::string path) {
 }
 
 void Sprite::render(Camera* camera) {
-	this->texture.render(this->getPosition().x, this->getPosition().y, camera);
+	this->texture.render(this->getPosition().x - this->getSize().x/2.0, this->getPosition().y - this->getSize().y / 2.0, camera);
 
-	this->setSize(this->texture.getSize().x,
+	this->size(this->texture.getSize().x,
 				this->texture.getSize().y);
 }
 
@@ -23,6 +23,7 @@ void Sprite::move(Camera* camera){
 		(this->getPosition().x + this->getSize().x > LEVEL_WIDTH))
 	{
 		//Move back
+		printf("going back from edge \n");
 		this->changeX(-this->getVelocity().x);
 
 	}
@@ -38,6 +39,12 @@ void Sprite::move(Camera* camera){
 		this->changeY(-this->getVelocity().y);
 	}
 
+}
+
+void Sprite::size(double x, double y)
+{
+	this->setSize(x, y);
+	this->getTexture()->setSize(x, y);
 }
 
 Texture* Sprite::getTexture()
@@ -61,4 +68,16 @@ double Sprite::distance(Sprite* other)
 	double deltaY = this->getPosition().x - other->getPosition().x;
 
 	return sqrt(deltaX * deltaX + deltaY * deltaY);
+}
+
+void Sprite::setVelocityX(double x)
+{
+	this->setVelocity(x, this->getVelocity().y);
+
+}
+
+void Sprite::setVelocityY(double y)
+{
+	this->setVelocity(this->getVelocity().x, y);
+
 }

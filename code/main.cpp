@@ -8,6 +8,7 @@
 #include "level.h"
 #include "sprite.h"
 #include "camera.h"
+#include "circle.h"
 
 SDL_Window* gWindow = NULL;
 SDL_Renderer* gRenderer = NULL;
@@ -17,6 +18,8 @@ Camera camera;
 Sprite sonic;
 Sprite eggman;
 
+Circle circles[CIRCLES_COUNT];
+
 //Texture circleSprite;
 
 Level level;
@@ -25,6 +28,25 @@ bool initSDL();
 void clean();
 bool loadTextures();
 SDL_Texture* loadTexture(std::string path);
+
+
+int findCollidingBall(int id) {
+	for(int i=0; i<CIRCLES_COUNT; i++){
+
+		if (i == id) { // if there are no bugs in here....
+			continue;
+		}
+
+		double distance = circles[i].distance(&circles[id]);
+
+		if (distance <= circles[i].getRadius() + circles[id].getRadius()) {
+			printf("distance between %d and %d = %F \n", id, i, distance);
+
+			return i;
+		}
+	}
+	return -1;
+}
 
 int main(int argc, char* args[]) {
 	printf("hello world! \n");
@@ -49,12 +71,12 @@ int main(int argc, char* args[]) {
 
 
 	sonic.setPosition( WINDOW_WIDTH / 2., WINDOW_HEIGHT / 2. );
-	sonic.setSize(100, 100);
+	sonic.size(100, 100);
 	sonic.getTexture()->setSize(100, 100);
 	sonic.setAcceleration(0.1);
 
 	eggman.setPosition(WINDOW_WIDTH, WINDOW_HEIGHT);
-	eggman.setSize(100, 100);
+	eggman.size(100, 100);
 	eggman.getTexture()->setSize(100, 100);
 	eggman.setAcceleration(0.1);
 
@@ -65,6 +87,13 @@ int main(int argc, char* args[]) {
 
 	int mouseX = 0, mouseY = 0;
 	bool mousePressed = false;
+
+	for (int i = 0; i < CIRCLES_COUNT; i++) {
+		circles[i].setRadius(20);
+		circles[i].setPosition(i * 50, i * 50);
+		circles[i].setVelocity(i+1, -i-1);
+		circles[i].getTexture()->setAlpha(100 + i * 35);
+	}
 
 	SDL_Event e;
 	while (true) {
@@ -85,13 +114,13 @@ int main(int argc, char* args[]) {
 				break;
 
 			case SDL_KEYDOWN:
-				sonic.buttonDown(&e, speed);
+				//sonic.buttonDown(&e, speed);
 
 				break;
 
 			case SDL_KEYUP:
-				sonic.buttonUp(&e);
-
+				//sonic.buttonUp(&e);
+				break;
 
 			}
 		}
@@ -100,13 +129,35 @@ int main(int argc, char* args[]) {
 
 		if (mousePressed) {
 			SDL_GetMouseState(&mouseX, &mouseY);
-			eggman.setTargetPosition(mouseX / camera.getScale() + camera.getPosition().x / camera.getScale(),
+
+			/*eggman.setTargetPosition(mouseX / camera.getScale() + camera.getPosition().x / camera.getScale(),
 									mouseY / camera.getScale() + camera.getPosition().y / camera.getScale());
 			printf("target [%F, %F] \n", mouseX / camera.getScale() + camera.getPosition().x / camera.getScale(),
-									mouseY / camera.getScale() + camera.getPosition().y) / camera.getScale();
+									mouseY / camera.getScale() + camera.getPosition().y) / camera.getScale();*/
 		}
 
-		sonic.accelerate();
+		for (int i = 0; i < CIRCLES_COUNT; i++) {
+			circles[i].move(&camera);
+			circles[i].bounceIfOnEdge();
+
+			for (int j = 0; j < CIRCLES_COUNT; j++) {
+				int collidingId = findCollidingBall(i);
+
+				if (collidingId == -1) {
+					break;
+				}
+				else {
+					printf("collision between %d and %d \n\n", i, collidingId);
+					circles[i].resolveCollision(&circles[collidingId]);
+					//circles[i].move(&camera);
+					//circles[i].bounceIfOnEdge();
+
+					circles[collidingId].move(&camera);
+				}
+			}
+		}
+
+		/*sonic.accelerate();
 		sonic.move(&camera);
 
 		eggman.accelerateTowardsTarget();
@@ -127,41 +178,34 @@ int main(int argc, char* args[]) {
 		} 
 		if (camera.getScale() == 0.5) {
 			camera.setScale(0.5);
-		}
+		}*/
 		
 
 
 		// CAMERA
-		/*camera.setTargetPosition(sonic.getPosition().x + 10 * sonic.getVelocity().x,
-								sonic.getPosition().y + 10 * sonic.getVelocity().y);
-		camera.accelerateTowardsTarget();*/
-		camera.setTargetPosition((sonic.getPosition().x + eggman.getPosition().x) / 2.0f - camera.getSize().x,
+		/*camera.setTargetPosition((sonic.getPosition().x + eggman.getPosition().x) / 2.0f - camera.getSize().x,
 							(sonic.getPosition().y + eggman.getPosition().y) / 2.0f - camera.getSize().y);
 		camera.setVelocity(0, 0);
 		camera.accelerateTowardsTarget();
-		camera.move();
-		//camera.setPosition(sonic.getPosition().x, sonic.getPosition().y);
-		//camera.move();
-		//printf("%F %F \n", camera.getPosition().x, camera.getPosition().y);
+		camera.move();*/
 
-		
 
 
 	// RENDERING
 		SDL_RenderClear(gRenderer);
 
-		level.renderLevel(&camera);
+		for (int i = 0; i < CIRCLES_COUNT; i++) {
+			circles[i].render(&camera);
+		}
+
+		/*level.renderLevel(&camera);
 		sonic.render(&camera);
-		eggman.render(&camera);
-		//circleSprite.render();
+		eggman.render(&camera);*/
 
 		SDL_RenderPresent(gRenderer);
 
 
-		// CONSOLE OUTPUT
-		/*if (abs(squareSprite.getVelocity().x) > 0.1 && abs(squareSprite.getVelocity().x) + 0.1 < speed) {
-			printf("x vel = %F \n", squareSprite.getVelocity().x);
-		}*/
+
 
 	}
 
@@ -202,6 +246,10 @@ void clean() {
 	eggman.free();
 	//circleSprite.free();
 
+	for (int i = 0; i < CIRCLES_COUNT; i++) {
+		circles[i].free();
+	}
+
 	SDL_DestroyRenderer(gRenderer);
 	gRenderer = NULL;
 
@@ -216,6 +264,14 @@ void clean() {
 
 
 bool loadTextures() {
+
+	for (int i = 0; i < CIRCLES_COUNT; i++) {
+		if (!circles[i].loadTexture("textures/circle.png")) {
+			printf("Failed to load circle.png!\n");
+			return false;
+		}
+	}
+
 	if (!sonic.loadTexture("textures/texture1.png")) {
 		printf("Failed to load texture1.png!\n");
 		return false;

@@ -146,6 +146,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="code\camera.cpp" />
+    <ClCompile Include="code\circle.cpp" />
     <ClCompile Include="code\level.cpp" />
     <ClCompile Include="code\main.cpp" />
     <ClCompile Include="code\movable.cpp" />
@@ -154,6 +155,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="code\camera.h" />
+    <ClInclude Include="code\circle.h" />
     <ClInclude Include="code\globals.h" />
     <ClInclude Include="code\level.h" />
     <ClInclude Include="code\movable.h" />
