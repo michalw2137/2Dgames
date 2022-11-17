@@ -31,7 +31,7 @@ SDL_Texture* loadTexture(std::string path);
 
 
 int findCollidingBall(int id) {
-	for(int i=0; i<CIRCLES_COUNT; i++){
+	for(int i=id; i<CIRCLES_COUNT; i++){
 
 		if (i == id) { // if there are no bugs in here....
 			continue;
@@ -40,7 +40,8 @@ int findCollidingBall(int id) {
 		double distance = circles[i].distance(&circles[id]);
 
 		if (distance <= circles[i].getRadius() + circles[id].getRadius()) {
-			printf("distance between %d and %d = %F \n", id, i, distance);
+			printf("collision between %d and %d \n", i, id);
+			circles[i].resolveCollision(&circles[id]);
 
 			return i;
 		}
@@ -88,12 +89,18 @@ int main(int argc, char* args[]) {
 	int mouseX = 0, mouseY = 0;
 	bool mousePressed = false;
 
+	
 	for (int i = 0; i < CIRCLES_COUNT; i++) {
 		circles[i].setRadius(20);
-		circles[i].setPosition(i * 50, i * 50);
-		circles[i].setVelocity(i+1, -i-1);
-		circles[i].getTexture()->setAlpha(100 + i * 35);
+		circles[i].setPosition(i * 100, i * 100);
+		circles[i].setVelocity(2, -2);
+		circles[i].getTexture()->setAlpha(100 + i * 29);
 	}
+
+	printf("ball size = %F, %F \n", circles[0].getSize().x, circles[0].getSize().y);
+	printf("ball texture size = %F, %F \n", circles[0].getTexture()->getSize().x, circles[0].getTexture()->getSize().y);
+	printf("ball radius = %F \n", circles[0].getRadius());
+
 
 	SDL_Event e;
 	while (true) {
@@ -140,21 +147,8 @@ int main(int argc, char* args[]) {
 			circles[i].move(&camera);
 			circles[i].bounceIfOnEdge();
 
-			for (int j = 0; j < CIRCLES_COUNT; j++) {
-				int collidingId = findCollidingBall(i);
+			int wait = findCollidingBall(i);
 
-				if (collidingId == -1) {
-					break;
-				}
-				else {
-					printf("collision between %d and %d \n\n", i, collidingId);
-					circles[i].resolveCollision(&circles[collidingId]);
-					//circles[i].move(&camera);
-					//circles[i].bounceIfOnEdge();
-
-					circles[collidingId].move(&camera);
-				}
-			}
 		}
 
 		/*sonic.accelerate();

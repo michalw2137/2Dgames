@@ -65,7 +65,7 @@ void Sprite::changeY(double y)
 double Sprite::distance(Sprite* other)
 {
 	double deltaX = this->getPosition().x - other->getPosition().x;
-	double deltaY = this->getPosition().x - other->getPosition().x;
+	double deltaY = this->getPosition().y - other->getPosition().y;
 
 	return sqrt(deltaX * deltaX + deltaY * deltaY);
 }

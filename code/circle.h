@@ -15,6 +15,8 @@ public:
 	double getRadius();
 	void setRadius(double r);
 
+	std::string str();
+
 private:
 	double mass = 1;
 	double radius;
