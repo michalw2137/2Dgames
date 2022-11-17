@@ -36,6 +36,9 @@ SDL_Texture* loadTexture(std::string path);
 bool SEPARATE = false;
 bool BOUNCE = false;
 
+int randInt(int start, int end) {
+	return rand() % end + start;
+}
 
 void resolveCollisions(int id) {
 	for(int i=id; i<CIRCLES_COUNT; i++){
@@ -64,6 +67,7 @@ void resolveCollisions(int id) {
 
 int main(int argc, char* args[]) {
 	printf("hello world! \n");
+	srand(time(NULL));
 
 	if (!initSDL()) {
 		printf("Failed to load SDL! \n");
@@ -107,11 +111,12 @@ int main(int argc, char* args[]) {
 	int mouseX = 0, mouseY = 0;
 	bool mousePressed = false;
 
-	
+	int margin = 50;
+	int maxSpeed = 5;
 	for (int i = 0; i < CIRCLES_COUNT; i++) {
 		circles[i].setRadius(20);
-		circles[i].setPosition(i * 100, i * 100);
-		circles[i].setVelocity(2, -2);
+		circles[i].setPosition(randInt(margin, WINDOW_WIDTH- margin), randInt(margin, WINDOW_HEIGHT - margin));
+		circles[i].setVelocity(randInt(-maxSpeed, maxSpeed), randInt(-maxSpeed, maxSpeed));
 		circles[i].getTexture()->setAlpha(100 + i * 29);
 	}
 
