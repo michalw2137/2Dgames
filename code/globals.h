@@ -14,9 +14,21 @@ const int LEVEL_WIDTH = 2400;
 const int SCREEN_FPS = 60;
 const int SCREEN_TICKS_PER_FRAME = 1000 / SCREEN_FPS;
 
+//bool SEPARATE = false;
+//bool BOUNCE = false;
+
+
 struct Vector {
 	double x, y;
 };
+
+namespace gl {
+	Vector vector(Vector position1, Vector position2);
+	Vector scale(Vector vec, double scale);
+	Vector normalise(Vector vec);
+	double length(Vector vec);
+}
+
 
 
 const SDL_Color BACKGROUND_COLOR = { 0x00, 0x00, 0x00, 0xFF };

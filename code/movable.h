@@ -20,7 +20,12 @@ public:
 
 	void buttonUp(SDL_Event* e);
 
+	//changers
+	void changePosition(Vector delta);
+
 	//setters
+	void setSize(Vector size);
+
 	void setSize(double x, double y);
 
 	void setTargetPosition(double x, double y);

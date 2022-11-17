@@ -10,9 +10,12 @@ public:
 
 	void resolveCollision(Circle* other);
 
+	void separate(Circle* other);
+
 	void bounceIfOnEdge();
 
 	double getRadius();
+
 	void setRadius(double r);
 
 	std::string str();

@@ -6,7 +6,6 @@
 Texture::Texture() {
 	this->pTexture = NULL;
 
-	this->pRenderRect = { 0, 0, 0, 0 };
 	this->pSize = { 0, 0 };
 	this->pPosition = { 0, 0 };
 
@@ -49,10 +48,7 @@ bool Texture::loadFromFile(std::string path) {
 	this->pSize.x = tempSurface->w;
 	this->pSize.y = tempSurface->h;
 
-	this->pRenderRect.w = tempSurface->w;
-	this->pRenderRect.h = tempSurface->h;
-
-	//printf("loaded texture size [%i, %i] \n", this->pRenderRect.w, this->pRenderRect.h);
+	printf("loaded texture size [%i, %i] \n", this->pSize.x, this->pSize.y);
 	SDL_FreeSurface(tempSurface);
 	return true;
 }
@@ -77,6 +73,13 @@ Vector Texture::getSize() {
 
 void Texture::setPosition(double x, double y) {
 	this->pPosition = { x, y };
+}
+
+void Texture::setTexture(Texture* texture)
+{
+	this->pTexture = texture->getTexture();
+	this->pSize = texture->getSize();
+	this->pPosition = texture->getPosition();
 }
 
 void Texture::setSize(double x, double y) {

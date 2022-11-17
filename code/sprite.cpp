@@ -5,11 +5,15 @@ bool Sprite::loadTexture(std::string path) {
 	return this->texture.loadFromFile(path);
 }
 
+void Sprite::setTexture(Texture* texture) {
+	this->texture = *texture;
+}
+
 void Sprite::render(Camera* camera) {
 	this->texture.render(this->getPosition().x - this->getSize().x/2.0, this->getPosition().y - this->getSize().y / 2.0, camera);
 
-	this->size(this->texture.getSize().x,
-				this->texture.getSize().y);
+	//this->size(this->texture.getSize().x,
+	//			this->texture.getSize().y);
 }
 
 void Sprite::move(Camera* camera){

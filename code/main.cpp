@@ -9,6 +9,7 @@
 #include "sprite.h"
 #include "camera.h"
 #include "circle.h"
+#include "button.h"
 
 SDL_Window* gWindow = NULL;
 SDL_Renderer* gRenderer = NULL;
@@ -17,6 +18,9 @@ Camera camera;
 
 Sprite sonic;
 Sprite eggman;
+
+Button separateButton;
+Button bounceButton;
 
 Circle circles[CIRCLES_COUNT];
 
@@ -29,8 +33,11 @@ void clean();
 bool loadTextures();
 SDL_Texture* loadTexture(std::string path);
 
+bool SEPARATE = false;
+bool BOUNCE = false;
 
-int findCollidingBall(int id) {
+
+void resolveCollisions(int id) {
 	for(int i=id; i<CIRCLES_COUNT; i++){
 
 		if (i == id) { // if there are no bugs in here....
@@ -40,13 +47,19 @@ int findCollidingBall(int id) {
 		double distance = circles[i].distance(&circles[id]);
 
 		if (distance <= circles[i].getRadius() + circles[id].getRadius()) {
-			printf("collision between %d and %d \n", i, id);
-			circles[i].resolveCollision(&circles[id]);
+			//printf("collision between %d and %d \n", i, id);
 
-			return i;
+			if (SEPARATE) 
+			{
+				circles[i].separate(&circles[id]);
+			}
+
+			if (BOUNCE) 
+			{
+				circles[i].resolveCollision(&circles[id]);
+			}
 		}
 	}
-	return -1;
 }
 
 int main(int argc, char* args[]) {
@@ -65,6 +78,11 @@ int main(int argc, char* args[]) {
 	}
 	printf("loaded succesfully! \n");
 
+	separateButton.changeSize(100, 50);
+	bounceButton.changeSize(100, 50);
+
+	separateButton.setPosition(50, WINDOW_WIDTH - 25);
+	bounceButton.setPosition(50, WINDOW_WIDTH - 75);
 
 	//circleSprite.setAlpha(255/2);
 	camera.setScale(1);
@@ -112,7 +130,13 @@ int main(int argc, char* args[]) {
 
 			case SDL_MOUSEBUTTONDOWN:
 				mousePressed = true;
-				//printf("MOUSE PRESSED at (%i, %i)\n", mouseX, mouseY);
+				SDL_GetMouseState(&mouseX, &mouseY);
+
+				bounceButton.mouseClicked(mouseX, mouseY, &BOUNCE);
+				separateButton.mouseClicked(mouseX, mouseY, &SEPARATE);
+
+				printf("BOUNCE = %d\n", BOUNCE);
+				printf("SEPARATE = %d\n", SEPARATE);
 				break;
 
 			case SDL_MOUSEBUTTONUP:
@@ -137,6 +161,8 @@ int main(int argc, char* args[]) {
 		if (mousePressed) {
 			SDL_GetMouseState(&mouseX, &mouseY);
 
+			
+
 			/*eggman.setTargetPosition(mouseX / camera.getScale() + camera.getPosition().x / camera.getScale(),
 									mouseY / camera.getScale() + camera.getPosition().y / camera.getScale());
 			printf("target [%F, %F] \n", mouseX / camera.getScale() + camera.getPosition().x / camera.getScale(),
@@ -147,7 +173,7 @@ int main(int argc, char* args[]) {
 			circles[i].move(&camera);
 			circles[i].bounceIfOnEdge();
 
-			int wait = findCollidingBall(i);
+			resolveCollisions(i);
 
 		}
 
@@ -191,6 +217,9 @@ int main(int argc, char* args[]) {
 		for (int i = 0; i < CIRCLES_COUNT; i++) {
 			circles[i].render(&camera);
 		}
+
+		separateButton.render(&camera);
+		bounceButton.render(&camera);
 
 		/*level.renderLevel(&camera);
 		sonic.render(&camera);
@@ -258,6 +287,20 @@ void clean() {
 
 
 bool loadTextures() {
+	if (!separateButton.loadTextures("textures/button1_on.png", "textures/button1_off.png")) {
+		printf("Failed to load separate button!\n");
+		return false;
+	}
+
+	if (!bounceButton.loadTextures("textures/button2_on.png", "textures/button2_off.png")) {
+		printf("Failed to load bounce button!\n");
+		return false;
+	}
+
+	if (!sonic.loadTexture("textures/texture1.png")) {
+		printf("Failed to load texture1.png!\n");
+		return false;
+	}
 
 	for (int i = 0; i < CIRCLES_COUNT; i++) {
 		if (!circles[i].loadTexture("textures/circle.png")) {

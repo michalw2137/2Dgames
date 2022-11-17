@@ -122,6 +122,12 @@ void Movable::buttonUp(SDL_Event* e) {
 	}
 }
 
+void Movable::changePosition(Vector delta)
+{
+	this->pPosition.x += delta.x;
+	this->pPosition.y += delta.y;
+}
+
 
 void Movable::setTargetPosition(double x, double y) {
 	this->pTargetPosition.x = x;
@@ -139,6 +145,10 @@ void Movable::setVelocity(double x, double y)
 
 void Movable::setPosition(double x, double y) {
 	this->pPosition = { x, y };
+}
+
+void Movable::setSize(Vector size) {
+	this->pSize = size;
 }
 
 void Movable::setSize(double x, double y) {

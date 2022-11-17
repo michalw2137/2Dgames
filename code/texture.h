@@ -17,6 +17,7 @@ public:
 	//setters
 	void setAlpha(Uint8 alpha);
 
+	void setTexture(Texture* texture);
 	void setSize(double x, double y);
 
 	void setPosition(double x, double y);
@@ -30,7 +31,6 @@ public:
 
 private:
 	SDL_Texture* pTexture;
-	SDL_Rect pRenderRect;
 
 	Vector pSize;
 	Vector pPosition;
