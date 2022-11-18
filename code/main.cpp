@@ -49,7 +49,7 @@ void resolveCollisions(int id) {
 
 		double distance = circles[i].distance(&circles[id]);
 
-		if (distance <= circles[i].getRadius() + circles[id].getRadius()) {
+		if (distance < circles[i].getRadius() + circles[id].getRadius()) {
 			//printf("collision between %d and %d \n", i, id);
 
 			if (SEPARATE) 
@@ -85,8 +85,8 @@ int main(int argc, char* args[]) {
 	separateButton.changeSize(100, 50);
 	bounceButton.changeSize(100, 50);
 
-	separateButton.setPosition(50, WINDOW_WIDTH - 25);
-	bounceButton.setPosition(50, WINDOW_WIDTH - 75);
+	separateButton.setPosition(50, WINDOW_HEIGHT - 25);
+	bounceButton.setPosition(50, WINDOW_HEIGHT - 75);
 
 	//circleSprite.setAlpha(255/2);
 	camera.setScale(1);
@@ -114,7 +114,7 @@ int main(int argc, char* args[]) {
 	int margin = 50;
 	int maxSpeed = 5;
 	for (int i = 0; i < CIRCLES_COUNT; i++) {
-		circles[i].setRadius(20);
+		circles[i].setRadius(50);
 		circles[i].setPosition(randInt(margin, WINDOW_WIDTH- margin), randInt(margin, WINDOW_HEIGHT - margin));
 		circles[i].setVelocity(randInt(-maxSpeed, maxSpeed), randInt(-maxSpeed, maxSpeed));
 		circles[i].getTexture()->setAlpha(100 + i * 29);
@@ -175,10 +175,10 @@ int main(int argc, char* args[]) {
 		}
 
 		for (int i = 0; i < CIRCLES_COUNT; i++) {
-			circles[i].move(&camera);
 			circles[i].bounceIfOnEdge();
 
 			resolveCollisions(i);
+			circles[i].move(&camera);
 
 		}
 

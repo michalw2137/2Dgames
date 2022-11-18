@@ -78,8 +78,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Users\student\Documents\SDL2_image-2.6.2\include;C:\Users\student\Documents\SDL2-2.24.1\include;D:\POLIBUDA\5 SEMESTR\Gry 2D\Gry2D\lib\SDL2-2.24.1\include;D:\POLIBUDA\5 SEMESTR\Gry 2D\Gry2D\lib\SDL2_image-2.6.2\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\student\Documents\SDL2-2.24.1\lib\x64;C:\Users\student\Documents\SDL2_image-2.6.2\lib\x64;D:\POLIBUDA\5 SEMESTR\Gry 2D\Gry2D\lib\SDL2-2.24.1\lib\x64;D:\POLIBUDA\5 SEMESTR\Gry 2D\Gry2D\lib\SDL2_image-2.6.2\lib\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>D:\polibuda\sem5\dwuwymiarowe_gry\lib\SDL2_image-devel-2.6.2-VC\SDL2_image-2.6.2\include;D:\polibuda\sem5\dwuwymiarowe_gry\SDL2-devel-2.24.1-VC\SDL2-2.24.1\include;C:\Users\student\Documents\SDL2_image-2.6.2\include;C:\Users\student\Documents\SDL2-2.24.1\include;D:\POLIBUDA\5 SEMESTR\Gry 2D\Gry2D\lib\SDL2-2.24.1\include;D:\POLIBUDA\5 SEMESTR\Gry 2D\Gry2D\lib\SDL2_image-2.6.2\include;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\polibuda\sem5\dwuwymiarowe_gry\SDL2-devel-2.24.1-VC\SDL2-2.24.1\lib\x64;D:\polibuda\sem5\dwuwymiarowe_gry\lib\SDL2_image-devel-2.6.2-VC\SDL2_image-2.6.2\lib\x64;C:\Users\student\Documents\SDL2-2.24.1\lib\x64;C:\Users\student\Documents\SDL2_image-2.6.2\lib\x64;D:\POLIBUDA\5 SEMESTR\Gry 2D\Gry2D\lib\SDL2-2.24.1\lib\x64;D:\POLIBUDA\5 SEMESTR\Gry 2D\Gry2D\lib\SDL2_image-2.6.2\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>

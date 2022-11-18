@@ -3,10 +3,10 @@
 
 extern SDL_Renderer* gRenderer;
 
-const int CIRCLES_COUNT = 4;
+const int CIRCLES_COUNT = 15;
 
-const int WINDOW_HEIGHT = 500;
-const int WINDOW_WIDTH = 500;
+const int WINDOW_HEIGHT = 700;
+const int WINDOW_WIDTH = 1200;
 
 const int LEVEL_HEIGHT = 2400;
 const int LEVEL_WIDTH = 2400;
