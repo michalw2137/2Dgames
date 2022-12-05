@@ -78,15 +78,12 @@ int main(int argc, char* args[]) {
 
 
 	box.setPosition( WINDOW_WIDTH / 2., WINDOW_HEIGHT / 2. );
-	box.size(100, 100);
-	box.getTexture()->setSize(100, 100);
+	box.size(50, 50);
 	box.setAcceleration(0.1);
 
 	ball.setPosition(WINDOW_WIDTH / 2., WINDOW_HEIGHT / 2.);
-	ball.size(100, 100);
-	ball.getTexture()->setSize(100, 100);
 	ball.setAcceleration(0.1);
-	ball.setRadius(50);
+	ball.setRadius(25);
 	
 	double speed = 10;
 
