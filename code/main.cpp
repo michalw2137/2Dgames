@@ -86,7 +86,7 @@ int main(int argc, char* args[]) {
 	ball.size(100, 100);
 	ball.getTexture()->setSize(100, 100);
 	ball.setAcceleration(0.1);
-
+	ball.setRadius(50);
 	
 	double speed = 10;
 
@@ -153,6 +153,7 @@ int main(int argc, char* args[]) {
 		}
 		
 		level.resolveWallCollisions(&box);
+		level.resolveWallCollisions(&ball);
 
 	// CAMERA
 	camera.setTargetPosition((box.getPosition().x + ball.getPosition().x) / 2.0f - camera.getSize().x,

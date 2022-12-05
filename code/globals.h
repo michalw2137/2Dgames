@@ -30,6 +30,7 @@ namespace gl {
 	Vector scale(Vector vec, double scale);
 	Vector normalise(Vector vec);
 	double length(Vector vec);
+	double clamp(double x, double min, double max);
 }
 
 

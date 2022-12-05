@@ -147,3 +147,11 @@ void Level::resolveWallCollisions(Box* box) {
 	}
 	//printf("all walls \n\n");
 }
+
+void Level::resolveWallCollisions(Ball* ball) {
+	for (Box wall : walls) {
+		//printf("next wall:\n");
+		ball->resolveBoxCollision(&wall);
+	}
+	//printf("all walls \n\n");
+}

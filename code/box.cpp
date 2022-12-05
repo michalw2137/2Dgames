@@ -27,7 +27,7 @@ void Box::resolveBoxCollision(Box* wall) {
 	//printf("right = %F  \n", right);
 	//printf("top = %F    \n", top);
 	//printf("bottom = %F \n", bottom);
-	printf("l,r,t,b:  %F, %F, %F, %F \n", left, right, top, bottom);
+	//printf("l,r,t,b:  %F, %F, %F, %F \n", left, right, top, bottom);
 
 	if (left > 0 && right > 0 && top > 0 && bottom > 0) {
 		printf("dupa");

@@ -99,3 +99,45 @@ std::string Ball::str()
         << this->getVelocity().y;
     return ss.str();
 }
+
+void Ball::resolveBoxCollision(Box* wall) {
+    double x = this->getPosition().x;
+    double y = this->getPosition().y;
+
+    double l = wall->getPosition().x;
+    double r = wall->getPosition().x + wall->getSize().x;
+
+    double t = wall->getPosition().y;
+    double b = wall->getPosition().y + wall->getSize().y;
+
+    Vector f = { gl::clamp(x, l, r),  gl::clamp(y, t, b) };
+
+
+    Vector v = {0, 0};
+    double distance = gl::length({ f.x - x, f.y - y });
+    printf("distance %F\n, R = %F", distance, this->getRadius());
+
+    if (distance < this->getRadius()) {
+        printf("ball touches wall \n");
+        if (x == f.x && y == f.y) {
+            printf("box like collision \n");
+            double left = x - l;
+            double right = r - x;
+            double top = y - t;
+            double bottom = b - y;
+
+            left < right ? v.x = -left : v.x = right;
+            top < bottom ? v.y = -top : v.y = bottom;
+
+            abs(v.x) < abs(v.y) ? v.y = 0 : v.x = 0;
+        }
+        else {
+            printf("ball like collision \n");
+
+            v.x = ((x - f.x) / distance) * (this->getRadius() - distance);
+            v.y = ((y - f.y) / distance) * (this->getRadius() - distance);
+        }
+
+        this->changePosition(v);
+    }
+}

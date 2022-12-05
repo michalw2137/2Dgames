@@ -3,6 +3,7 @@
 #include <string>
 #include "globals.h"
 #include "sprite.h"
+#include "box.h"
 
 class Ball: public Sprite{
 
@@ -19,6 +20,8 @@ public:
 	void setRadius(double r);
 
 	std::string str();
+
+	void resolveBoxCollision(Box* other);
 
 private:
 	double mass = 1;
