@@ -115,7 +115,7 @@ void Ball::resolveBoxCollision(Box* wall) {
 
     Vector v = {0, 0};
     double distance = gl::length({ f.x - x, f.y - y });
-    printf("distance %F\n, R = %F", distance, this->getRadius());
+    //printf("distance %F\n, R = %F", distance, this->getRadius());
 
     if (distance < this->getRadius()) {
         printf("ball touches wall \n");

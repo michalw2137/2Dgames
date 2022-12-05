@@ -21,6 +21,8 @@ Camera camera;
 Box box;
 Ball ball;
 
+Box target;
+
 Level level;
 Level levels[LEVELS];
 
@@ -85,6 +87,12 @@ int main(int argc, char* args[]) {
 	ball.setAcceleration(0.1);
 	ball.setRadius(25);
 	
+	target.setPosition(WINDOW_WIDTH / 4., WINDOW_HEIGHT / 4.);
+	target.size(30, 30);
+	target.getTexture()->setSize(50, 50);
+	//target.size(10, 100);
+	//target.getTexture()->setSize(100, 100);
+		
 	double speed = 10;
 
 	int mouseX = 0, mouseY = 0;
@@ -152,6 +160,9 @@ int main(int argc, char* args[]) {
 		level.resolveWallCollisions(&box);
 		level.resolveWallCollisions(&ball);
 
+		box.resolveBoxCollision(&target);
+		ball.resolveBoxCollision(&target);
+
 	// CAMERA
 	camera.setTargetPosition((box.getPosition().x + ball.getPosition().x) / 2.0f - camera.getSize().x,
 						(box.getPosition().y + ball.getPosition().y) / 2.0f - camera.getSize().y);
@@ -167,6 +178,8 @@ int main(int argc, char* args[]) {
 
 		box.render(&camera);
 		ball.render(&camera);
+
+		target.render(&camera);
 
 		SDL_RenderPresent(gRenderer);
 
@@ -228,10 +241,13 @@ bool loadTextures() {
 		return false;
 	}
 	if (!ball.loadTexture("textures/texture2.png")) {
-		printf("Failed to load texture1.png!\n");
+		printf("Failed to load texture2.png!\n");
 		return false;
 	}
-
+	if (!target.loadTexture("textures/target.png")) {
+		printf("Failed to load target.png!\n");
+		return false;
+	}
 
 	if (!levels[0].loadLevelFromFile("levels/level1.txt", 16, 16)) {
 		printf("Failed to load level.txt!\n");
