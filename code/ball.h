@@ -4,13 +4,13 @@
 #include "globals.h"
 #include "sprite.h"
 
-class Circle: public Sprite{
+class Ball: public Sprite{
 
 public:
 
-	void resolveCollision(Circle* other);
+	void resolveCollision(Ball* other);
 
-	void separate(Circle* other);
+	void separate(Ball* other);
 
 	void bounceIfOnEdge();
 

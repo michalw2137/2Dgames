@@ -69,6 +69,25 @@ bool Level::loadTextures() {
 		}
 	}
 
+	int i = 0;
+	for (int y = 0; y < height * 100; y += 100) {
+		for (int x = 0; x < width * 100; x += 100) {
+			if (this->layout.at(i) == '\n') {
+				i++;
+			}
+
+			if (this->layout.at(i) == 's') {
+				printf("wall at %d, %d\n", x, y);
+			}
+			Box wall;
+			wall.setPosition(x, y);
+			wall.setSize(100, 100);
+			walls.push_back(wall);
+			
+			i++;
+		}
+	}
+
 	return true;
 }
 
@@ -118,4 +137,10 @@ void Level::renderLevel(Camera* camera) {
 		}
 	}
 	//printf("level loaded \n\n");
+}
+
+void Level::resolveWallCollisions(Box* box) {
+	for  (Box wall : walls) {
+		box->resolveBoxCollision(&wall);
+	}
 }

@@ -5,6 +5,9 @@
 #include <fstream>
 #include <sstream>
 #include "texture.h"
+#include <vector>
+#include "box.h"
+#include "ball.h"
 
 class Level
 {
@@ -19,9 +22,13 @@ public:
 
 	void renderLevel(Camera* camera);
 
+	void resolveWallCollisions(Ball* ball);
+	void resolveWallCollisions(Box* box);
 	
 private:
 	int width, height;
+
+	std::vector<Box> walls;
 
 	std::string layout;
 	Texture textures[TEXTURES_SIZE];

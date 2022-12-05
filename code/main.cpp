@@ -8,7 +8,9 @@
 #include "level.h"
 #include "sprite.h"
 #include "camera.h"
-#include "circle.h"
+#include "ball.h"
+#include "box.h"
+
 #include "button.h"
 
 SDL_Window* gWindow = NULL;
@@ -16,8 +18,8 @@ SDL_Renderer* gRenderer = NULL;
 
 Camera camera;
 
-Sprite box;
-Sprite ball;
+Box box;
+Ball ball;
 
 Level level;
 Level levels[LEVELS];
@@ -150,7 +152,7 @@ int main(int argc, char* args[]) {
 			camera.setScale(0.5);
 		}
 		
-
+		level.resolveWallCollisions(&box);
 
 	// CAMERA
 	camera.setTargetPosition((box.getPosition().x + ball.getPosition().x) / 2.0f - camera.getSize().x,

@@ -1,8 +1,8 @@
 #include <string>
-#include "circle.h"
+#include "ball.h"
 #include <sstream>
 
-void Circle::resolveCollision(Circle* other)
+void Ball::resolveCollision(Ball* other)
 {
     double newX1, newX2, newY1, newY2;
 
@@ -13,17 +13,17 @@ void Circle::resolveCollision(Circle* other)
     newY2 = (other->getVelocity().y * (other->mass - this->mass) / (this->mass + other->mass) + (2 * this->mass * this->getVelocity().y) / (this->mass + other->mass));
 
 
-    //printf("\ncircles before collision: \n %s \n %s \n\n", this->str().c_str(), other->str().c_str());
+    //printf("\nBalls before collision: \n %s \n %s \n\n", this->str().c_str(), other->str().c_str());
     
     //printf("distance = %F \n\n", this->distance(other));
     this->setVelocity(newX1, newY1); 
     other->setVelocity(newX2, newY2);
 
-    //printf("circles after collision: \n %s \n %s \n\n", this->str().c_str(), other->str().c_str());
+    //printf("Balls after collision: \n %s \n %s \n\n", this->str().c_str(), other->str().c_str());
 
 }
 
-void Circle::separate(Circle* other)
+void Ball::separate(Ball* other)
 {
     Vector vec = gl::vector(this->getPosition(), other->getPosition());
     Vector normalised = gl::normalise(vec);
@@ -38,19 +38,19 @@ void Circle::separate(Circle* other)
     //printf("scale = (%F) \n", scale);
     //printf("separation vector = (%F, %F) \n\n", separation.x, separation.y);
     //
-    //printf("\ncircles before collision: \n %s \n %s \n\n", this->str().c_str(), other->str().c_str());
+    //printf("\nBalls before collision: \n %s \n %s \n\n", this->str().c_str(), other->str().c_str());
     //
     //printf("distance = %F \n", this->distance(other));
 
     this->changePosition(separation);
     other->changePosition(gl::scale(separation, -1));
 
-    //printf("circles after collision: \n %s \n %s \n\n", this->str().c_str(), other->str().c_str());
+    //printf("Balls after collision: \n %s \n %s \n\n", this->str().c_str(), other->str().c_str());
 
 
 }
 
-void Circle::bounceIfOnEdge()
+void Ball::bounceIfOnEdge()
 {
     if (this->getPosition().x <= this->radius)            // hit left edge, go right
     {
@@ -73,18 +73,18 @@ void Circle::bounceIfOnEdge()
     
 }
 
-double Circle::getRadius()
+double Ball::getRadius()
 {
 	return radius;
 }
 
-void Circle::setRadius(double r)
+void Ball::setRadius(double r)
 {
 	this->radius = r;
 	this->size(r * 2.0, r * 2.0);
 }
 
-std::string Circle::str()
+std::string Ball::str()
 {
     std::stringstream ss;
     ss << "r = "

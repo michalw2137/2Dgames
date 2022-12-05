@@ -42,13 +42,3 @@ double Camera::getScale() {
 double Camera::getTargetScale() {
 	return this->targetScale;
 }
-
-//void Camera::accelerateTowardsTarget() {
-//	printf("camera position: (%F, %F) \n", getPosition().x, getPosition().y);
-//	printf("camera target: (%F, %F) \n", getTargetPosition().x, getTargetPosition().y);
-//	double tempX = (this->getTargetPosition().x - this->getPosition().x - WINDOW_WIDTH) / 20.;
-//	double tempY = (this->getTargetPosition().y - this->getPosition().y - WINDOW_HEIGHT) / 20.;
-//	setVelocity(tempX, tempY);
-//
-//
-//}
