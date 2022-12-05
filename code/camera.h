@@ -14,8 +14,6 @@ public:
 	double getScale();
 	double getTargetScale();
 
-	//void accelerateTowardsTarget();
-
 private:
 	double scale;
 	double targetScale;

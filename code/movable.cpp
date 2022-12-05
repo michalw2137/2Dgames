@@ -30,11 +30,11 @@ void Movable::accelerate() {
 }
 
 void Movable::accelerateTowardsTarget() {
-	printf("camera position: (%F, %F) \n", pPosition.x, pPosition.y);
-	printf("camera target: (%F, %F) \n", pTargetPosition.x, pTargetPosition.y);
+	//printf("camera position: (%F, %F) \n", pPosition.x, pPosition.y);
+	//printf("camera target: (%F, %F) \n", pTargetPosition.x, pTargetPosition.y);
 	this->pVelocity.x = (this->pTargetPosition.x - this->pPosition.x - (this->pSize.x / 2.)) / 20.;
 	this->pVelocity.y = (this->pTargetPosition.y - this->pPosition.y - (this->pSize.y / 2.)) / 20.;
-	printf("camera speed: (%F, %F) \n\n", pVelocity.x, pVelocity.y);
+	//printf("camera speed: (%F, %F) \n\n", pVelocity.x, pVelocity.y);
 
 }
 

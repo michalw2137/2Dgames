@@ -78,11 +78,12 @@ bool Level::loadTextures() {
 
 			if (this->layout.at(i) == 's') {
 				printf("wall at %d, %d\n", x, y);
+				Box wall;
+				wall.setPosition(x, y);
+				wall.setSize(100, 100);
+				walls.push_back(wall);
+
 			}
-			Box wall;
-			wall.setPosition(x, y);
-			wall.setSize(100, 100);
-			walls.push_back(wall);
 			
 			i++;
 		}
@@ -141,6 +142,8 @@ void Level::renderLevel(Camera* camera) {
 
 void Level::resolveWallCollisions(Box* box) {
 	for  (Box wall : walls) {
+		//printf("next wall:\n");
 		box->resolveBoxCollision(&wall);
 	}
+	//printf("all walls \n\n");
 }

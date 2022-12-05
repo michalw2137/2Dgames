@@ -161,8 +161,6 @@ int main(int argc, char* args[]) {
 	camera.accelerateTowardsTarget();
 	camera.move();
 
-
-
 	// RENDERING
 		SDL_RenderClear(gRenderer);
 
