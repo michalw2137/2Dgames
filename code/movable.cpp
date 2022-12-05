@@ -62,33 +62,21 @@ void Movable::move() {
 	}
 }
 
-void Movable::buttonDown(SDL_Event* e, double speed) {
+void Movable::arrowDown(SDL_Event* e, double speed) {
 	switch (e->key.keysym.sym) {
 	case SDLK_UP:
-		/*if (e->key.repeat == 0) {
-			printf("UP \n");
-		}*/
 		this->pTargetVelocity.y = -speed;
 		break;
 
 	case SDLK_DOWN:
-		/*if (e->key.repeat == 0) {
-			printf("DOWN \n");
-		}*/
 		this->pTargetVelocity.y = speed;
 		break;
 
 	case SDLK_LEFT:
-		/*if (e->key.repeat == 0) {
-			printf("LEFT \n");
-		}*/
 		this->pTargetVelocity.x = -speed;
 		break;
 
 	case SDLK_RIGHT:
-		/*if (e->key.repeat == 0) {
-			printf("RIGHT \n");
-		}*/
 		this->pTargetVelocity.x = speed;
 		break;
 
@@ -96,25 +84,65 @@ void Movable::buttonDown(SDL_Event* e, double speed) {
 	}
 }
 
-void Movable::buttonUp(SDL_Event* e) {
+void Movable::arrowUp(SDL_Event* e) {
 	switch (e->key.keysym.sym) {
 	case SDLK_UP:
-		//printf("UP released \n");
 		this->pTargetVelocity.y = 0;
 		break;
 
 	case SDLK_DOWN:
-		//printf("DOWN released \n");
 		this->pTargetVelocity.y = 0;
 		break;
 
 	case SDLK_LEFT:
-		//printf("LEFT released \n");
 		this->pTargetVelocity.x = 0;
 		break;
 
 	case SDLK_RIGHT:
-		//printf("RIGHT released \n");
+		this->pTargetVelocity.x = 0;
+		break;
+
+	default: break;
+	}
+}
+
+void Movable::wsadDown(SDL_Event* e, double speed) {
+	switch (e->key.keysym.sym) {
+	case SDLK_w:
+		this->pTargetVelocity.y = -speed;
+		break;
+
+	case SDLK_s:
+		this->pTargetVelocity.y = speed;
+		break;
+
+	case SDLK_a:
+		this->pTargetVelocity.x = -speed;
+		break;
+
+	case SDLK_d:
+		this->pTargetVelocity.x = speed;
+		break;
+
+	default: break;
+	}
+}
+
+void Movable::wsadUp(SDL_Event* e) {
+	switch (e->key.keysym.sym) {
+	case SDLK_w:
+		this->pTargetVelocity.y = 0;
+		break;
+
+	case SDLK_s:
+		this->pTargetVelocity.y = 0;
+		break;
+
+	case SDLK_a:
+		this->pTargetVelocity.x = 0;
+		break;
+
+	case SDLK_d:
 		this->pTargetVelocity.x = 0;
 		break;
 

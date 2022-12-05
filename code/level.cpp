@@ -39,7 +39,10 @@ void Level::free() {
 	}*/
 }
 
-bool Level::laodLevelFromFile(std::string path) {
+bool Level::loadLevelFromFile(std::string path, int width, int height) {
+	this->width = width;
+	this->height = height;
+
 	std::ifstream fTemp;
 	std::stringstream sTemp;
 	fTemp.open(path);
@@ -71,8 +74,8 @@ bool Level::loadTextures() {
 
 void Level::renderLevel(Camera* camera) {
 	int i = 0;
-	for (int y = 0; y < LEVEL_HEIGHT; y += 100) {
-		for (int x = 0; x < LEVEL_WIDTH; x += 100) {
+	for (int y = 0; y < height * 100; y += 100) {
+		for (int x = 0; x < width * 100; x += 100) {
 
 			if (this->layout.at(i) == '\n') {
 				i++;
@@ -95,8 +98,8 @@ void Level::renderLevel(Camera* camera) {
 				textures[TEXTURES_WATER].render(x, y, camera);
 				break;
 
-			case ' ':
-				textures[TEXTURES_AIR].setAlpha(255 / 2);
+			case 'a':
+				//textures[TEXTURES_AIR].setAlpha(255 / 2);
 
 				textures[TEXTURES_AIR].render(x, y, camera);
 				break;

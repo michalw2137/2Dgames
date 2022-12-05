@@ -16,57 +16,46 @@ SDL_Renderer* gRenderer = NULL;
 
 Camera camera;
 
-Sprite sonic;
-Sprite eggman;
-
-Button separateButton;
-Button bounceButton;
-
-Circle circles[CIRCLES_COUNT];
-
-//Texture circleSprite;
+Sprite box;
+Sprite ball;
 
 Level level;
+Level levels[LEVELS];
 
 bool initSDL();
 void clean();
 bool loadTextures();
 SDL_Texture* loadTexture(std::string path);
 
-bool SEPARATE = false;
-bool BOUNCE = false;
 
 int randInt(int start, int end) {
 	return rand() % end + start;
 }
 
-void resolveCollisions(int id) {
-	for(int i=id; i<CIRCLES_COUNT; i++){
-
-		if (i == id) { // if there are no bugs in here....
-			continue;
-		}
-
-		double distance = circles[i].distance(&circles[id]);
-
-		if (distance <= circles[i].getRadius() + circles[id].getRadius()) {
-			//printf("collision between %d and %d \n", i, id);
-
-			if (SEPARATE) 
-			{
-				circles[i].separate(&circles[id]);
-			}
-
-			if (BOUNCE) 
-			{
-				circles[i].resolveCollision(&circles[id]);
-			}
-		}
-	}
-}
+//void resolveCollisions(int id) {
+//	for(int i=id; i<CIRCLES_COUNT; i++){
+//
+//		if (i == id) { // if there are no bugs in here....
+//			continue;
+//		}
+//
+//		double distance = circles[i].distance(&circles[id]);
+//
+//		if (distance <= circles[i].getRadius() + circles[id].getRadius()) {
+//			//printf("collision between %d and %d \n", i, id);
+//
+//			
+//			circles[i].separate(&circles[id]);
+//			
+//
+//			
+//			circles[i].resolveCollision(&circles[id]);
+//			
+//		}
+//	}
+//}
 
 int main(int argc, char* args[]) {
-	printf("hello world! \n");
 	srand(time(NULL));
 
 	if (!initSDL()) {
@@ -82,48 +71,28 @@ int main(int argc, char* args[]) {
 	}
 	printf("loaded succesfully! \n");
 
-	separateButton.changeSize(100, 50);
-	bounceButton.changeSize(100, 50);
-
-	separateButton.setPosition(50, WINDOW_WIDTH - 25);
-	bounceButton.setPosition(50, WINDOW_WIDTH - 75);
-
-	//circleSprite.setAlpha(255/2);
 	camera.setScale(1);
 	camera.setTargetScale(1);
 
 
-	sonic.setPosition( WINDOW_WIDTH / 2., WINDOW_HEIGHT / 2. );
-	sonic.size(100, 100);
-	sonic.getTexture()->setSize(100, 100);
-	sonic.setAcceleration(0.1);
+	box.setPosition( WINDOW_WIDTH / 2., WINDOW_HEIGHT / 2. );
+	box.size(100, 100);
+	box.getTexture()->setSize(100, 100);
+	box.setAcceleration(0.1);
 
-	eggman.setPosition(WINDOW_WIDTH, WINDOW_HEIGHT);
-	eggman.size(100, 100);
-	eggman.getTexture()->setSize(100, 100);
-	eggman.setAcceleration(0.1);
+	ball.setPosition(WINDOW_WIDTH / 2., WINDOW_HEIGHT / 2.);
+	ball.size(100, 100);
+	ball.getTexture()->setSize(100, 100);
+	ball.setAcceleration(0.1);
 
-	//circleSprite.setPosition( WINDOW_WIDTH / 2., WINDOW_HEIGHT / 2. );
-	//circleSprite.setTargetPosition( WINDOW_WIDTH / 2. - circleSprite.getSize().x, WINDOW_HEIGHT / 2. - circleSprite.getSize().y );
+	
 	double speed = 10;
-
 
 	int mouseX = 0, mouseY = 0;
 	bool mousePressed = false;
 
-	int margin = 50;
-	int maxSpeed = 5;
-	for (int i = 0; i < CIRCLES_COUNT; i++) {
-		circles[i].setRadius(20);
-		circles[i].setPosition(randInt(margin, WINDOW_WIDTH- margin), randInt(margin, WINDOW_HEIGHT - margin));
-		circles[i].setVelocity(randInt(-maxSpeed, maxSpeed), randInt(-maxSpeed, maxSpeed));
-		circles[i].getTexture()->setAlpha(100 + i * 29);
-	}
 
-	printf("ball size = %F, %F \n", circles[0].getSize().x, circles[0].getSize().y);
-	printf("ball texture size = %F, %F \n", circles[0].getTexture()->getSize().x, circles[0].getTexture()->getSize().y);
-	printf("ball radius = %F \n", circles[0].getRadius());
-
+	level = levels[0];
 
 	SDL_Event e;
 	while (true) {
@@ -136,61 +105,37 @@ int main(int argc, char* args[]) {
 			case SDL_MOUSEBUTTONDOWN:
 				mousePressed = true;
 				SDL_GetMouseState(&mouseX, &mouseY);
-
-				bounceButton.mouseClicked(mouseX, mouseY, &BOUNCE);
-				separateButton.mouseClicked(mouseX, mouseY, &SEPARATE);
-
-				printf("BOUNCE = %d\n", BOUNCE);
-				printf("SEPARATE = %d\n", SEPARATE);
 				break;
 
 			case SDL_MOUSEBUTTONUP:
 				mousePressed = false;
-				//printf("MOUSE LET GO at (%i, %i)\n", mouseX, mouseY);
 				break;
 
 			case SDL_KEYDOWN:
-				//sonic.buttonDown(&e, speed);
+				box.arrowDown(&e, speed);
+				ball.wsadDown(&e, speed);
 
 				break;
 
 			case SDL_KEYUP:
-				//sonic.buttonUp(&e);
+				box.arrowUp(&e);
+				ball.wsadUp(&e);
+
 				break;
 
 			}
 		}
-		// LOGIC AND MOVEMENT
+		// LOGIC AND MOVEMENT		
 
+		box.accelerate();
+		box.move(&camera);
 
-		if (mousePressed) {
-			SDL_GetMouseState(&mouseX, &mouseY);
-
-			
-
-			/*eggman.setTargetPosition(mouseX / camera.getScale() + camera.getPosition().x / camera.getScale(),
-									mouseY / camera.getScale() + camera.getPosition().y / camera.getScale());
-			printf("target [%F, %F] \n", mouseX / camera.getScale() + camera.getPosition().x / camera.getScale(),
-									mouseY / camera.getScale() + camera.getPosition().y) / camera.getScale();*/
-		}
-
-		for (int i = 0; i < CIRCLES_COUNT; i++) {
-			circles[i].move(&camera);
-			circles[i].bounceIfOnEdge();
-
-			resolveCollisions(i);
-
-		}
-
-		/*sonic.accelerate();
-		sonic.move(&camera);
-
-		eggman.accelerateTowardsTarget();
-		eggman.move(&camera);
+		ball.accelerate();
+		ball.move(&camera);
 
 
 		if (camera.getScale() == 1) {
-			if (sonic.distance(&eggman) > WINDOW_WIDTH) {
+			if (box.distance(&ball) > WINDOW_WIDTH) {
 				camera.setTargetScale(0.5);
 				printf("zooooooooooooooming out \n");
 			}
@@ -203,37 +148,29 @@ int main(int argc, char* args[]) {
 		} 
 		if (camera.getScale() == 0.5) {
 			camera.setScale(0.5);
-		}*/
+		}
 		
 
 
-		// CAMERA
-		/*camera.setTargetPosition((sonic.getPosition().x + eggman.getPosition().x) / 2.0f - camera.getSize().x,
-							(sonic.getPosition().y + eggman.getPosition().y) / 2.0f - camera.getSize().y);
-		camera.setVelocity(0, 0);
-		camera.accelerateTowardsTarget();
-		camera.move();*/
+	// CAMERA
+	camera.setTargetPosition((box.getPosition().x + ball.getPosition().x) / 2.0f - camera.getSize().x,
+						(box.getPosition().y + ball.getPosition().y) / 2.0f - camera.getSize().y);
+	camera.setVelocity(0, 0);
+	camera.accelerateTowardsTarget();
+	camera.move();
 
 
 
 	// RENDERING
 		SDL_RenderClear(gRenderer);
 
-		for (int i = 0; i < CIRCLES_COUNT; i++) {
-			circles[i].render(&camera);
-		}
 
-		separateButton.render(&camera);
-		bounceButton.render(&camera);
+		level.renderLevel(&camera);
 
-		/*level.renderLevel(&camera);
-		sonic.render(&camera);
-		eggman.render(&camera);*/
+		box.render(&camera);
+		ball.render(&camera);
 
 		SDL_RenderPresent(gRenderer);
-
-
-
 
 	}
 
@@ -247,7 +184,7 @@ bool initSDL() {
 		return false;
 	}
 
-	gWindow = SDL_CreateWindow("zadanie 4", 100, 100, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
+	gWindow = SDL_CreateWindow("zadanie 7_8", 100, 100, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
 	if (gWindow == NULL) {
 		printf("Window could not be created! SDL Error: %s\n", SDL_GetError());
 		return false;
@@ -270,13 +207,9 @@ bool initSDL() {
 }
 
 void clean() {
-	sonic.free();
-	eggman.free();
+	box.free();
+	ball.free();
 	//circleSprite.free();
-
-	for (int i = 0; i < CIRCLES_COUNT; i++) {
-		circles[i].free();
-	}
 
 	SDL_DestroyRenderer(gRenderer);
 	gRenderer = NULL;
@@ -292,50 +225,43 @@ void clean() {
 
 
 bool loadTextures() {
-	if (!separateButton.loadTextures("textures/button1_on.png", "textures/button1_off.png")) {
-		printf("Failed to load separate button!\n");
+	if (!box.loadTexture("textures/texture1.png")) {
+		printf("Failed to load texture1.png!\n");
 		return false;
 	}
-
-	if (!bounceButton.loadTextures("textures/button2_on.png", "textures/button2_off.png")) {
-		printf("Failed to load bounce button!\n");
-		return false;
-	}
-
-	if (!sonic.loadTexture("textures/texture1.png")) {
+	if (!ball.loadTexture("textures/texture2.png")) {
 		printf("Failed to load texture1.png!\n");
 		return false;
 	}
 
-	for (int i = 0; i < CIRCLES_COUNT; i++) {
-		if (!circles[i].loadTexture("textures/circle.png")) {
-			printf("Failed to load circle.png!\n");
-			return false;
-		}
-	}
 
-	if (!sonic.loadTexture("textures/texture1.png")) {
-		printf("Failed to load texture1.png!\n");
-		return false;
-	}
-	if (!eggman.loadTexture("textures/texture2.png")) {
-		printf("Failed to load texture1.png!\n");
-		return false;
-	}
-	/*if (!circleSprite.loadFromFile("textures/texture2.png")) {
-		printf("Failed to load texture2.png!\n");
-		return false;
-	}*/
-
-	if (!level.laodLevelFromFile("levels/level.txt")) {
+	if (!levels[0].loadLevelFromFile("levels/level1.txt", 16, 16)) {
 		printf("Failed to load level.txt!\n");
 		return false;
 	}
-
-	if (!level.loadTextures()) {
+	if (!levels[0].loadTextures()) {
 		printf("Failed to load some of the textures!\n");
 		return false;
 	}
+
+	if (!levels[1].loadLevelFromFile("levels/level2.txt", 20, 20)) {
+		printf("Failed to load level.txt!\n");
+		return false;
+	}
+	if (!levels[1].loadTextures()) {
+		printf("Failed to load some of the textures!\n");
+		return false;
+	}
+
+	if (!levels[2].loadLevelFromFile("levels/level3.txt", 24, 24)) {
+		printf("Failed to load level.txt!\n");
+		return false;
+	}
+	if (!levels[2].loadTextures()) {
+		printf("Failed to load some of the textures!\n");
+		return false;
+	}
+
 	return true;
 }
 

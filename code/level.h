@@ -13,7 +13,7 @@ public:
 	~Level();
 	void free();
 
-	bool laodLevelFromFile(std::string path);
+	bool loadLevelFromFile(std::string path, int width, int height);
 
 	bool loadTextures();
 
@@ -21,6 +21,8 @@ public:
 
 	
 private:
+	int width, height;
+
 	std::string layout;
 	Texture textures[TEXTURES_SIZE];
 

@@ -16,9 +16,14 @@ public:
 
 	void move();
 
-	void buttonDown(SDL_Event* e, double speed);
+	void arrowDown(SDL_Event* e, double speed);
 
-	void buttonUp(SDL_Event* e);
+	void arrowUp(SDL_Event* e);
+
+	void wsadDown(SDL_Event* e, double speed);
+
+	void wsadUp(SDL_Event* e);
+
 
 	//changers
 	void changePosition(Vector delta);
