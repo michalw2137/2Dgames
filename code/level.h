@@ -25,6 +25,11 @@ public:
 	void resolveWallCollisions(Ball* ball);
 	void resolveWallCollisions(Box* box);
 	
+	bool touchesWall(Vector position);
+
+	int getHeight();
+	int getWidth();
+
 private:
 	int width, height;
 

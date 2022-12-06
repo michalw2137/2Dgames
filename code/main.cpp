@@ -26,6 +26,8 @@ Target target;
 Level level;
 Level levels[LEVELS];
 
+int pointsBall = 0, pointsBox = 0;
+
 bool initSDL();
 void clean();
 bool loadTextures();
@@ -58,6 +60,26 @@ int randInt(int start, int end) {
 //		}
 //	}
 //}
+
+void setRandomPosition(Sprite* sprite) {
+	double x = 0, y = 0;
+	do {
+		x = 50 * randInt(0, level.getWidth());
+		y = 50 * randInt(0, level.getHeight());
+	} while (level.touchesWall({ x, y }));
+	sprite->setPosition(x, y);
+}
+
+void resetLevel() {
+	level = levels[target.getCurrentLevel()];
+	setRandomPosition(&box);
+	setRandomPosition(&ball);
+	do {
+		setRandomPosition(&target);
+	} while (target.getPosition() == ball.getPosition() || target.getPosition() == box.getPosition());
+	
+	printf("loaded level %d \n", target.getCurrentLevel());
+}
 
 int main(int argc, char* args[]) {
 	srand(time(NULL));
@@ -163,12 +185,16 @@ int main(int argc, char* args[]) {
 		//box.resolveBoxCollision(&target);
 		//ball.resolveBoxCollision(&target);
 		if (target.checkForCollision(&box)) {
-			level = levels[target.getCurrentLevel()];
+			//level = levels[target.getCurrentLevel()];
 			printf("point for box \n");
+			pointsBox++;
+			resetLevel();
 		}
 		if (target.checkForCollision(&ball)) {
-			level = levels[target.getCurrentLevel()];
+			//level = levels[target.getCurrentLevel()];
 			printf("point for ball \n");
+			pointsBall++;
+			resetLevel();
 		}
 
 

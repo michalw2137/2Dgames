@@ -30,7 +30,7 @@ void Box::resolveBoxCollision(Box* wall) {
 	//printf("l,r,t,b:  %F, %F, %F, %F \n", left, right, top, bottom);
 
 	if (left > 0 && right > 0 && top > 0 && bottom > 0) {
-		printf("box touches wall \n");
+		//printf("box touches wall \n");
 		Vector v = {0, 0};
 
 		left < right ? v.x = -left : v.x = right;

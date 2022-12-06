@@ -19,6 +19,15 @@ const int LEVELS = 3;
 
 struct Vector {
 	double x, y;
+
+	bool operator==(Vector a) {
+		if (a.x == x && a.y == y) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
 };
 
 namespace gl {

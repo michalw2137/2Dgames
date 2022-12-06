@@ -118,9 +118,9 @@ void Ball::resolveBoxCollision(Box* wall) {
     //printf("distance %F\n, R = %F", distance, this->getRadius());
 
     if (distance < this->getRadius()) {
-        printf("ball touches wall \n");
+        //printf("ball touches wall \n");
         if (x == f.x && y == f.y) {
-            printf("box like collision \n");
+            //printf("box like collision \n");
             double left = x - l;
             double right = r - x;
             double top = y - t;
@@ -132,7 +132,7 @@ void Ball::resolveBoxCollision(Box* wall) {
             abs(v.x) < abs(v.y) ? v.y = 0 : v.x = 0;
         }
         else {
-            printf("ball like collision \n");
+            //printf("ball like collision \n");
 
             v.x = ((x - f.x) / distance) * (this->getRadius() - distance);
             v.y = ((y - f.y) / distance) * (this->getRadius() - distance);

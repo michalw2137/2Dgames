@@ -4,6 +4,7 @@
 #include <string>
 #include <iostream>
 #include "camera.h"
+#include "sprite.h"
 
 Level::Level() {
 }
@@ -17,26 +18,7 @@ void Level::free() {
 		printf("null pointer \n");
 		return;
 	}
-	/*if (this->air != NULL) {
-		SDL_DestroyTexture(air);
-		this->air = NULL;
-	}
-	if (this->stone != NULL) {
-		SDL_DestroyTexture(stone);
-		this->stone = NULL;
-	}
-	if (this->brick != NULL) {
-		SDL_DestroyTexture(brick);
-		this->brick = NULL;
-	}
-	if (this->fire != NULL) {
-		SDL_DestroyTexture(fire);
-		this->fire = NULL;
-	}
-	if (this->water != NULL) {
-		SDL_DestroyTexture(water);
-		this->water = NULL;
-	}*/
+
 }
 
 bool Level::loadLevelFromFile(std::string path, int width, int height) {
@@ -67,20 +49,21 @@ bool Level::loadTextures() {
 			printf("failed to load %s !\n", texturesPaths[i].c_str());
 			return false;
 		}
+		textures[i].setSize(50, 50);
 	}
 
 	int i = 0;
-	for (int y = 0; y < height * 100; y += 100) {
-		for (int x = 0; x < width * 100; x += 100) {
+	for (int y = 0; y < height * 50; y += 50) {
+		for (int x = 0; x < width * 50; x += 50) {
 			if (this->layout.at(i) == '\n') {
 				i++;
 			}
 
-			if (this->layout.at(i) == 's') {
+			if (this->layout.at(i) == 'x') {
 				printf("wall at %d, %d\n", x, y);
 				Box wall;
 				wall.setPosition(x, y);
-				wall.setSize(100, 100);
+				wall.setSize(50, 50);
 				walls.push_back(wall);
 
 			}
@@ -94,8 +77,8 @@ bool Level::loadTextures() {
 
 void Level::renderLevel(Camera* camera) {
 	int i = 0;
-	for (int y = 0; y < height * 100; y += 100) {
-		for (int x = 0; x < width * 100; x += 100) {
+	for (int y = 0; y < height * 50; y += 50) {
+		for (int x = 0; x < width * 50; x += 50) {
 
 			if (this->layout.at(i) == '\n') {
 				i++;
@@ -106,7 +89,7 @@ void Level::renderLevel(Camera* camera) {
 				textures[TEXTURES_FIRE].render(x, y, camera);
 				break;
 
-			case 's':
+			case 'x':
 				textures[TEXTURES_STONE].render(x, y, camera);
 				break;
 
@@ -118,7 +101,7 @@ void Level::renderLevel(Camera* camera) {
 				textures[TEXTURES_WATER].render(x, y, camera);
 				break;
 
-			case 'a':
+			case '.':
 				//textures[TEXTURES_AIR].setAlpha(255 / 2);
 
 				textures[TEXTURES_AIR].render(x, y, camera);
@@ -154,4 +137,23 @@ void Level::resolveWallCollisions(Ball* ball) {
 		ball->resolveBoxCollision(&wall);
 	}
 	//printf("all walls \n\n");
+}
+
+bool Level::touchesWall(Vector position) {
+	for (Box wall : walls) {
+		if (wall.getPosition() == position) {
+			return true;
+		}
+	}
+	return false;
+}
+
+int Level::getHeight()
+{
+	return height;
+}
+
+int Level::getWidth()
+{
+	return width;
 }
