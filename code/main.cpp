@@ -10,7 +10,7 @@
 #include "camera.h"
 #include "ball.h"
 #include "box.h"
-
+#include "target.h"
 #include "button.h"
 
 SDL_Window* gWindow = NULL;
@@ -21,7 +21,7 @@ Camera camera;
 Box box;
 Ball ball;
 
-Box target;
+Target target;
 
 Level level;
 Level levels[LEVELS];
@@ -132,7 +132,7 @@ int main(int argc, char* args[]) {
 
 			}
 		}
-		// LOGIC AND MOVEMENT		
+	// LOGIC AND MOVEMENT		
 
 		box.accelerate();
 		box.move(&camera);
@@ -160,8 +160,17 @@ int main(int argc, char* args[]) {
 		level.resolveWallCollisions(&box);
 		level.resolveWallCollisions(&ball);
 
-		box.resolveBoxCollision(&target);
-		ball.resolveBoxCollision(&target);
+		//box.resolveBoxCollision(&target);
+		//ball.resolveBoxCollision(&target);
+		if (target.checkForCollision(&box)) {
+			level = levels[target.getCurrentLevel()];
+			printf("point for box \n");
+		}
+		if (target.checkForCollision(&ball)) {
+			level = levels[target.getCurrentLevel()];
+			printf("point for ball \n");
+		}
+
 
 	// CAMERA
 	camera.setTargetPosition((box.getPosition().x + ball.getPosition().x) / 2.0f - camera.getSize().x,

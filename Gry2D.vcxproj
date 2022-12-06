@@ -154,6 +154,7 @@
     <ClCompile Include="code\main.cpp" />
     <ClCompile Include="code\movable.cpp" />
     <ClCompile Include="code\sprite.cpp" />
+    <ClCompile Include="code\target.cpp" />
     <ClCompile Include="code\texture.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -165,6 +166,7 @@
     <ClInclude Include="code\level.h" />
     <ClInclude Include="code\movable.h" />
     <ClInclude Include="code\sprite.h" />
+    <ClInclude Include="code\target.h" />
     <ClInclude Include="code\texture.h" />
   </ItemGroup>
   <ItemGroup>
