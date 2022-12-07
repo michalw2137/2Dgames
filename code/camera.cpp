@@ -53,12 +53,24 @@ double Camera::getHalfWidth()
 	return this->getSize().x / 2.0;
 }
 
-bool camera::isseen(movable* sprite)
+bool Camera::isSeen(Movable* object)
 {
-	bool left = sprite->getposition().x < this->getposition().x + gethalfwidth();
-	bool right = sprite->getposition().x > this->getposition().x - gethalfwidth();
+	double right = this->getPosition().x + this->getSize().x;
+	double left = this->getPosition().x;
 
-	bool top = sprite->getposition().y < this->getposition().x + gethalfwidth();
-	bool bottom = sprite->getposition().y > this->getposition().x - gethalfwidth();
+	double top = this->getPosition().y;
+	double bottom = this->getPosition().y + this->getSize().y;
 
+	//printf(" r = %F \n l = %F \n t = %F \n b = %F \n\n", right, left, top, bottom);
+	//printf(" x = %F \n y = %F \n\n", object->getPosition().x + scale * object->getSize().x, object->getPosition().y + scale * object->getSize().y);
+
+	if (object->getPosition().x + scale * object->getSize().x > left && 
+		object->getPosition().x + scale * object->getSize().x < right &&
+		object->getPosition().y + scale * object->getSize().y > top && 
+		object->getPosition().y + scale * object->getSize().y < bottom) {
+		return true;
+	}
+	else {
+		return false;
+	}
 }

@@ -1,5 +1,6 @@
 #pragma once
 #include <SDL_image.h>
+#include <stdio.h>
 
 extern SDL_Renderer* gRenderer;
 
@@ -28,6 +29,23 @@ struct Vector {
 			return false;
 		}
 	}
+
+	Vector operator+(Vector b) {
+		return { x + b.x, y + b.y };
+	}
+
+	Vector operator*(double a) {
+		return { x * a, y * a};
+	}
+
+	Vector operator/(double b) {
+		if (b == 0) {
+			printf("DZIELENIE PRZEZ 0!! \n");
+			return { 0, 0 };
+		}
+		return { x/b, y/b};
+	}
+
 };
 
 namespace gl {

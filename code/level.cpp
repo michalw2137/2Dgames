@@ -31,7 +31,7 @@ bool Level::loadLevelFromFile(std::string path, int width, int height) {
 	if (fTemp.is_open()) {
 		sTemp << fTemp.rdbuf();
 
-		std::cout << sTemp.str() << '\n';
+		//std::cout << sTemp.str() << '\n';
 		this->layout = sTemp.str();
 
 		fTemp.close();
@@ -60,7 +60,7 @@ bool Level::loadTextures() {
 			}
 
 			if (this->layout.at(i) == 'x') {
-				printf("wall at %d, %d\n", x, y);
+				//printf("wall at %d, %d\n", x, y);
 				Box wall;
 				wall.setPosition(x, y);
 				wall.setSize(50, 50);

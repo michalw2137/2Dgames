@@ -48,7 +48,7 @@ bool Texture::loadFromFile(std::string path) {
 	this->pSize.x = tempSurface->w;
 	this->pSize.y = tempSurface->h;
 
-	printf("loaded texture size [%i, %i] \n", this->pSize.x, this->pSize.y);
+	//printf("loaded texture size [%i, %i] \n", this->pSize.x, this->pSize.y);
 	SDL_FreeSurface(tempSurface);
 	return true;
 }

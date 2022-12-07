@@ -82,7 +82,7 @@ void resetLevel() {
 
 	if (currentLevel >= LEVELS) {
 		currentLevel = 0;
-		printf("POINTS: \n circle: %d \n square: %d \n", pointsBall, pointsBox);
+		printf("\nPOINTS: \n circle: %d \n square: %d \n\n", pointsBall, pointsBox);
 		pointsBall = 0;
 		pointsBox = 0;
 	}
@@ -95,8 +95,9 @@ void resetLevel() {
 	} while (target.getPosition() == ball.getPosition() || target.getPosition() == box.getPosition());
 	
 	//CAMERA
-	camera.setPosition(level.getWidth() * 25 - camera.getSize().x/2., level.getHeight() * 25 - camera.getSize().y / 2.);
-	camera.setScale(1);
+	camera.setScale(1.3);
+	camera.setPosition(level.getWidth() * 25 - camera.getSize().x / 2., level.getHeight() * 25 - camera.getSize().y / 2.);
+
 }
 
 int main(int argc, char* args[]) {
@@ -167,7 +168,7 @@ int main(int argc, char* args[]) {
 			}
 		}
 	// LOGIC AND MOVEMENT		
-		std::cout << "\nbox is seen :" << camera.isSeen(&box) << '\n';
+		//camera.isSeen(&box);
 
 		box.accelerate();
 		box.move(&camera);
@@ -218,11 +219,34 @@ int main(int argc, char* args[]) {
 		
 
 	// CAMERA
-	/*camera.setTargetPosition((box.getPosition().x + ball.getPosition().x) / 2.0f - camera.getSize().x,
-						(box.getPosition().y + ball.getPosition().y) / 2.0f - camera.getSize().y);
-	camera.setVelocity(0, 0);
-	camera.accelerateTowardsTarget();
-	camera.move();*/
+		Vector pos = (box.getPosition() + ball.getPosition()) / 2.0;
+		//printf("%F, %F \n", camera.getSize().x / 2., camera.getSize().y / 2.);
+		camera.setPosition(pos.x - camera.getSize().x / 2.
+							, pos.y - camera.getSize().y / 2.
+		);
+		//if (!camera.isSeen(&box) ) {
+		//	printf("box isnt seen \n");
+		//}
+		////if (!camera.isSeen(&ball)) {
+		////	printf("ball isnt seen \n");
+		////}
+		//if (!camera.isSeen(&box) && camera.getScale() > 0.3) {
+		//	printf("box isnt seen \n");
+
+		//	camera.setScale(camera.getScale() - 0.05);
+
+		//	Vector pos = (box.getPosition() + ball.getPosition()) / 2.0;
+		//	camera.setPosition(pos.x, pos.y);
+
+		//}
+		//if (!camera.isSeen(&ball) && camera.getScale() > 0.3) {
+		//	printf("ball isnt seen \n");
+
+		//	camera.setScale(camera.getScale() - 0.05);
+
+		//	Vector pos = (box.getPosition() + ball.getPosition()) / 2.0;
+		//	camera.setPosition(pos.x, pos.y);
+		//}
 
 	// RENDERING
 		SDL_RenderClear(gRenderer);
