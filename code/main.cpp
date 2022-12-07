@@ -12,6 +12,8 @@
 #include "box.h"
 #include "target.h"
 #include "button.h"
+#include "screen.h"
+#include <windows.h>
 
 SDL_Window* gWindow = NULL;
 SDL_Renderer* gRenderer = NULL;
@@ -25,6 +27,10 @@ Target target;
 
 Level level;
 Level levels[LEVELS];
+
+Screen screen;
+
+int currentLevel = -1;
 
 int pointsBall = 0, pointsBox = 0;
 
@@ -71,14 +77,23 @@ void setRandomPosition(Sprite* sprite) {
 }
 
 void resetLevel() {
-	level = levels[target.getCurrentLevel()];
+	currentLevel++;
+
+	if (currentLevel >= LEVELS) {
+		currentLevel = 0;
+		printf("POINTS: \n circle: %d \n square: %d \n", pointsBall, pointsBox);
+		pointsBall = 0;
+		pointsBox = 0;
+	}
+
+	level = levels[currentLevel];
 	setRandomPosition(&box);
 	setRandomPosition(&ball);
 	do {
 		setRandomPosition(&target);
 	} while (target.getPosition() == ball.getPosition() || target.getPosition() == box.getPosition());
 	
-	printf("loaded level %d \n", target.getCurrentLevel());
+	//printf("\n loaded level %d \n", currentLevel);
 }
 
 int main(int argc, char* args[]) {
@@ -100,28 +115,22 @@ int main(int argc, char* args[]) {
 	camera.setScale(1);
 	camera.setTargetScale(1);
 
-
-	box.setPosition( WINDOW_WIDTH / 2., WINDOW_HEIGHT / 2. );
 	box.size(50, 50);
 	box.setAcceleration(0.1);
 
-	ball.setPosition(WINDOW_WIDTH / 2., WINDOW_HEIGHT / 2.);
 	ball.setAcceleration(0.1);
 	ball.setRadius(25);
 	
-	target.setPosition(WINDOW_WIDTH / 4., WINDOW_HEIGHT / 4.);
 	target.size(30, 30);
 	target.getTexture()->setSize(50, 50);
-	//target.size(10, 100);
-	//target.getTexture()->setSize(100, 100);
-		
+
 	double speed = 10;
 
 	int mouseX = 0, mouseY = 0;
 	bool mousePressed = false;
 
 
-	level = levels[0];
+	resetLevel();
 
 	SDL_Event e;
 	while (true) {
@@ -182,21 +191,27 @@ int main(int argc, char* args[]) {
 		level.resolveWallCollisions(&box);
 		level.resolveWallCollisions(&ball);
 
-		//box.resolveBoxCollision(&target);
-		//ball.resolveBoxCollision(&target);
 		if (target.checkForCollision(&box)) {
 			//level = levels[target.getCurrentLevel()];
 			printf("point for box \n");
 			pointsBox++;
+
+			currentLevel + 1 < LEVELS ? screen.boxWins() : screen.gameOver();
+
 			resetLevel();
-		}
-		if (target.checkForCollision(&ball)) {
+		} else if (target.checkForCollision(&ball)) {
 			//level = levels[target.getCurrentLevel()];
 			printf("point for ball \n");
 			pointsBall++;
+
+			currentLevel + 1 < LEVELS ? screen.ballWins() : screen.gameOver();
+
 			resetLevel();
 		}
-
+		else {
+			screen.emptyScreen();
+		}
+		
 
 	// CAMERA
 	camera.setTargetPosition((box.getPosition().x + ball.getPosition().x) / 2.0f - camera.getSize().x,
@@ -208,7 +223,6 @@ int main(int argc, char* args[]) {
 	// RENDERING
 		SDL_RenderClear(gRenderer);
 
-
 		level.renderLevel(&camera);
 
 		box.render(&camera);
@@ -216,8 +230,12 @@ int main(int argc, char* args[]) {
 
 		target.render(&camera);
 
+		//printf("a\n");
+		screen.render();
+		//printf("c\n");
 		SDL_RenderPresent(gRenderer);
 
+		Sleep(screen.getWait());
 	}
 
 	clean();
@@ -271,6 +289,10 @@ void clean() {
 
 
 bool loadTextures() {
+	if (!screen.loadTextures()) {
+		printf("Failed to load screens!\n");
+		return false;
+	}
 	if (!box.loadTexture("textures/texture1.png")) {
 		printf("Failed to load texture1.png!\n");
 		return false;

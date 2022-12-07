@@ -63,6 +63,16 @@ void Texture::render(double x, double y, Camera* camera) {
 	SDL_RenderCopy(gRenderer, this->pTexture, NULL, &tempRenderRect);
 }
 
+void Texture::render(){
+	SDL_Rect tempRenderRect = { this->pPosition.x,
+								this->pPosition.y,
+								this->pSize.x ,
+								this->pSize.y };
+	//printf("rendering at (%i, %i) texture size [%i, %i] \n", this->pRenderRect.x, this->pRenderRect.y, this->pRenderRect.w, this->pRenderRect.h);
+
+	SDL_RenderCopy(gRenderer, this->pTexture, NULL, &tempRenderRect);
+}
+
 void Texture::setAlpha(Uint8 alpha) {
 	SDL_SetTextureAlphaMod(pTexture, alpha);
 }

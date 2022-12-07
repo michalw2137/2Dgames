@@ -13,7 +13,7 @@ public:
 	bool loadFromFile(std::string path);
 
 	void render(double x, double y, Camera* camera);
-
+	void render();
 	//setters
 	void setAlpha(Uint8 alpha);
 

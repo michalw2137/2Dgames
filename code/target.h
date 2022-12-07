@@ -10,8 +10,6 @@ class Target: public Box{
 public:
 	bool checkForCollision(Sprite* sprite);
 
-	int getCurrentLevel();
-
 private:
 	int currentLevel = 0;
 	double detectionRadius = 50;
