@@ -14,6 +14,10 @@ public:
 	double getScale();
 	double getTargetScale();
 
+	double getHalfHeight();
+	double getHalfWidth();
+
+	bool isSeen(Movable* sprite);
 private:
 	double scale;
 	double targetScale;

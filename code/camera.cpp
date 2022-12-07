@@ -42,3 +42,23 @@ double Camera::getScale() {
 double Camera::getTargetScale() {
 	return this->targetScale;
 }
+
+double Camera::getHalfHeight()
+{
+	return this->getSize().y / 2.0;
+}
+
+double Camera::getHalfWidth()
+{
+	return this->getSize().x / 2.0;
+}
+
+bool camera::isseen(movable* sprite)
+{
+	bool left = sprite->getposition().x < this->getposition().x + gethalfwidth();
+	bool right = sprite->getposition().x > this->getposition().x - gethalfwidth();
+
+	bool top = sprite->getposition().y < this->getposition().x + gethalfwidth();
+	bool bottom = sprite->getposition().y > this->getposition().x - gethalfwidth();
+
+}

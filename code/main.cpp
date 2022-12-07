@@ -14,6 +14,7 @@
 #include "button.h"
 #include "screen.h"
 #include <windows.h>
+#include <iostream>
 
 SDL_Window* gWindow = NULL;
 SDL_Renderer* gRenderer = NULL;
@@ -93,7 +94,9 @@ void resetLevel() {
 		setRandomPosition(&target);
 	} while (target.getPosition() == ball.getPosition() || target.getPosition() == box.getPosition());
 	
-	//printf("\n loaded level %d \n", currentLevel);
+	//CAMERA
+	camera.setPosition(level.getWidth() * 25 - camera.getSize().x/2., level.getHeight() * 25 - camera.getSize().y / 2.);
+	camera.setScale(1);
 }
 
 int main(int argc, char* args[]) {
@@ -164,6 +167,7 @@ int main(int argc, char* args[]) {
 			}
 		}
 	// LOGIC AND MOVEMENT		
+		std::cout << "\nbox is seen :" << camera.isSeen(&box) << '\n';
 
 		box.accelerate();
 		box.move(&camera);
@@ -172,21 +176,21 @@ int main(int argc, char* args[]) {
 		ball.move(&camera);
 
 
-		if (camera.getScale() == 1) {
+		/*if (camera.getScale() == 1) {
 			if (box.distance(&ball) > WINDOW_WIDTH) {
 				camera.setTargetScale(0.5);
 				printf("zooooooooooooooming out \n");
 			}
 			else {
 			}
-		}
+		}*/
 		
-		if (camera.getScale() != camera.getTargetScale()) {
+		/*if (camera.getScale() != camera.getTargetScale()) {
 			camera.zoom(0.1);
 		} 
 		if (camera.getScale() == 0.5) {
 			camera.setScale(0.5);
-		}
+		}*/
 		
 		level.resolveWallCollisions(&box);
 		level.resolveWallCollisions(&ball);
@@ -214,11 +218,11 @@ int main(int argc, char* args[]) {
 		
 
 	// CAMERA
-	camera.setTargetPosition((box.getPosition().x + ball.getPosition().x) / 2.0f - camera.getSize().x,
+	/*camera.setTargetPosition((box.getPosition().x + ball.getPosition().x) / 2.0f - camera.getSize().x,
 						(box.getPosition().y + ball.getPosition().y) / 2.0f - camera.getSize().y);
 	camera.setVelocity(0, 0);
 	camera.accelerateTowardsTarget();
-	camera.move();
+	camera.move();*/
 
 	// RENDERING
 		SDL_RenderClear(gRenderer);
