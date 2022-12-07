@@ -31,6 +31,8 @@ Level levels[LEVELS];
 
 Screen screen;
 
+Texture arrow;
+
 int currentLevel = -1;
 
 int pointsBall = 0, pointsBox = 0;
@@ -95,7 +97,7 @@ void resetLevel() {
 	} while (target.getPosition() == ball.getPosition() || target.getPosition() == box.getPosition());
 	
 	//CAMERA
-	camera.setScale(1.3);
+	camera.setScale(1);
 	camera.setPosition(level.getWidth() * 25 - camera.getSize().x / 2., level.getHeight() * 25 - camera.getSize().y / 2.);
 
 }
@@ -258,6 +260,11 @@ int main(int argc, char* args[]) {
 
 		target.render(&camera);
 
+		if (!camera.isSeen(&target, false)) {
+			arrow.setPosition(400, 400);
+			arrow.render(gl::angle(target.getPosition(), camera.getPosition()));
+		}
+
 		//printf("a\n");
 		screen.render();
 		//printf("c\n");
@@ -317,6 +324,10 @@ void clean() {
 
 
 bool loadTextures() {
+	if (!arrow.loadFromFile("textures/arrow.png")) {
+		printf("Failed to load arrow!\n");
+		return false;
+	}
 	if (!screen.loadTextures()) {
 		printf("Failed to load screens!\n");
 		return false;

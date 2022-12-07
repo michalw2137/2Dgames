@@ -54,6 +54,7 @@ namespace gl {
 	Vector normalise(Vector vec);
 	double length(Vector vec);
 	double clamp(double x, double min, double max);
+	double angle(Vector p1, Vector p2);
 }
 
 

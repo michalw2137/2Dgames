@@ -17,7 +17,7 @@ public:
 	double getHalfHeight();
 	double getHalfWidth();
 
-	bool isSeen(Movable* sprite);
+	bool isSeen(Movable* sprite, bool print = false);
 private:
 	double scale;
 	double targetScale;

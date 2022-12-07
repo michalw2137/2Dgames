@@ -63,6 +63,12 @@ void Texture::render(double x, double y, Camera* camera) {
 	SDL_RenderCopy(gRenderer, this->pTexture, NULL, &tempRenderRect);
 }
 
+void Texture::render(double angle) {
+		SDL_Rect renderQuad = { getPosition().x, getPosition().y, getSize().x, getSize().y};
+
+		SDL_RenderCopyEx(gRenderer, pTexture, NULL, &renderQuad, angle, NULL, SDL_FLIP_NONE);
+}
+
 void Texture::render(){
 	SDL_Rect tempRenderRect = { this->pPosition.x,
 								this->pPosition.y,

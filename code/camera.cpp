@@ -53,7 +53,7 @@ double Camera::getHalfWidth()
 	return this->getSize().x / 2.0;
 }
 
-bool Camera::isSeen(Movable* object)
+bool Camera::isSeen(Movable* object, bool print)
 {
 	double right = this->getPosition().x + this->getSize().x;
 	double left = this->getPosition().x;
@@ -61,13 +61,16 @@ bool Camera::isSeen(Movable* object)
 	double top = this->getPosition().y;
 	double bottom = this->getPosition().y + this->getSize().y;
 
-	//printf(" r = %F \n l = %F \n t = %F \n b = %F \n\n", right, left, top, bottom);
-	//printf(" x = %F \n y = %F \n\n", object->getPosition().x + scale * object->getSize().x, object->getPosition().y + scale * object->getSize().y);
+	if (print) {
+		printf(" r = %F \n l = %F \n t = %F \n b = %F \n\n", right, left, top, bottom);
+		printf(" x = %F \n y = %F \n\n", object->getPosition().x + object->getSize().x, object->getPosition().y + object->getSize().y);
+	}
+	
 
-	if (object->getPosition().x + scale * object->getSize().x > left && 
-		object->getPosition().x + scale * object->getSize().x < right &&
-		object->getPosition().y + scale * object->getSize().y > top && 
-		object->getPosition().y + scale * object->getSize().y < bottom) {
+	if (object->getPosition().x + object->getSize().x > left && 
+		object->getPosition().x + object->getSize().x < right &&
+		object->getPosition().y + object->getSize().y > top && 
+		object->getPosition().y + object->getSize().y < bottom) {
 		return true;
 	}
 	else {

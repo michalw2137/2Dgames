@@ -42,3 +42,16 @@ double gl::clamp(double x, double min, double max) {
 	}
 }
 
+double gl::angle(Vector target, Vector camera)
+{
+		Vector vec = { target.x - camera.x -400,
+					   target.y - camera.y -400 };
+		Vector ref = { 0 , 1 };
+
+		double dot = vec.x * ref.x + vec.y * ref.y;
+		double det = vec.x * ref.y - vec.y * ref.x;
+
+		return atan2(dot, det) * 180 / M_PI + 90;
+	
+}
+
