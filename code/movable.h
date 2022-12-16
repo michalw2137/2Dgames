@@ -10,11 +10,13 @@ public:
 	~Movable();
 	void free();
 
-	void accelerate();
+	void accelerate(double deltaTime);
 
 	void accelerateTowardsTarget();
 
 	void move();
+
+	void jump(double startingVelocity);
 
 	void arrowDown(SDL_Event* e, double speed);
 
@@ -37,7 +39,7 @@ public:
 
 	void setPosition(double x, double y);
 
-	void setAcceleration(double a);
+	void setAcceleration(double x, double y);
 
 	void setVelocity(double x, double y);
 
@@ -52,6 +54,8 @@ public:
 
 	Vector getTargetVelocity();
 
+	double gravity = 3;
+
 private:
 
 	double acceleration;
@@ -59,6 +63,7 @@ private:
 	Vector pSize;
 	Vector pPosition;
 	Vector pVelocity;
+	Vector pAcceleration;
 	Vector pTargetVelocity;
 	Vector pTargetPosition;
 };

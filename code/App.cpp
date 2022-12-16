@@ -2,6 +2,7 @@
 
 #include "App.h"
 #include <windows.h>
+#include <iostream>
 
 static Camera camera;
 
@@ -21,10 +22,17 @@ static int currentLevel = -1;
 
 static int pointsBall = 0, pointsBox = 0;
 
-static double speed = 10;
+static double speed = 1;
 static int mouseX = 0, mouseY = 0;
 static bool mousePressed = false;
 static SDL_Event e;
+
+double jumpHeight = 0.01;
+double jumpTime = 2;
+
+
+double GRAVITY = 2 * jumpHeight / jumpTime / jumpTime;
+double STARTING_VELOCITY = 200 * jumpHeight / jumpTime;
 
 void App::setup() {
 	if (!loadTextures()) {
@@ -33,13 +41,18 @@ void App::setup() {
 		throw("Failed to load textures");
 	}
 
+	std::cout << "\ngravity = " << GRAVITY;
+
+	std::cout << "\nv0= " << STARTING_VELOCITY << "\n";
+
 	camera.setScale(1);
 	camera.setTargetScale(1);
 
 	box.size(50, 50);
-	box.setAcceleration(0.1);
 
-	ball.setAcceleration(0.1);
+	box.setAcceleration(0, GRAVITY);
+	ball.setAcceleration(0, GRAVITY);
+
 	ball.setRadius(25);
 
 	target.size(30, 30);
@@ -49,9 +62,26 @@ void App::setup() {
 
 }
 
+struct Clock
+{
+	Uint64 NOW = SDL_GetPerformanceCounter();
+	Uint64 LAST = 0;
+	double deltaTime = 0;
 
+	double tick()
+	{
+		LAST = NOW;
+		NOW = SDL_GetPerformanceCounter();
+
+		deltaTime = (double)((NOW - LAST) * 1000 / (double)SDL_GetPerformanceFrequency());
+
+		return deltaTime;
+	}
+} timer;
 
 void App::loop() {
+	double deltaTime = timer.tick();
+	//std::cout << "\ndelta time = " << deltaTime;
 
 	while (SDL_PollEvent(&e) != 0) {
 		switch (e.type) {
@@ -68,6 +98,12 @@ void App::loop() {
 			break;
 
 		case SDL_KEYDOWN:
+			if (e.key.keysym.sym == SDLK_UP && e.key.repeat == 0)
+				box.jump(STARTING_VELOCITY);
+
+			if (e.key.keysym.sym == SDLK_w && e.key.repeat == 0)
+				ball.jump(STARTING_VELOCITY);
+
 			box.arrowDown(&e, speed);
 			ball.wsadDown(&e, speed);
 
@@ -84,11 +120,13 @@ void App::loop() {
 	// LOGIC AND MOVEMENT		
 		//camera.isSeen(&box);
 
-	box.accelerate();
-	box.move(&camera);
+	box.accelerate(deltaTime);
+	ball.accelerate(deltaTime);
 
-	ball.accelerate();
-	ball.move(&camera);
+	//box.move(&camera);
+
+	//ball.accelerate(deltaTime);
+	//ball.move(&camera);
 
 
 	/*if (camera.getScale() == 1) {

@@ -1,6 +1,7 @@
 #pragma once
 #include <SDL_image.h>
 #include <stdio.h>
+#include <sstream>
 
 extern SDL_Renderer* gRenderer;
 
@@ -22,6 +23,12 @@ int randInt(int start, int end);
 struct Vector {
 	double x, y;
 
+	std::string str() {
+		std::stringstream ss;
+		ss << "[" << x << ", " << y << "]";
+		return ss.str();
+	}
+
 	bool operator==(Vector a) {
 		if (a.x == x && a.y == y) {
 			return true;
@@ -33,6 +40,11 @@ struct Vector {
 
 	Vector operator+(Vector b) {
 		return { x + b.x, y + b.y };
+	}
+
+	void operator+=(Vector b) {
+		x += b.x;
+		y += b.y;
 	}
 
 	Vector operator*(double a) {

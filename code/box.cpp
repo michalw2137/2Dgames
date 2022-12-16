@@ -43,6 +43,8 @@ void Box::resolveBoxCollision(Box* wall) {
 		if (abs(v.x) > abs(v.y)) {
 			v.x = 0;
 		}*/
+		if(v.x == 0) 
+			this->setVelocityY(0);
 		this->changePosition(v);
 	}
 }

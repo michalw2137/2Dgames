@@ -1,4 +1,4 @@
-#include <SDL_image.h>
+﻿#include <SDL_image.h>
 #include <iostream>
 #include "movable.h"
 #include "globals.h"
@@ -24,10 +24,24 @@ void Movable::free() {
 	this->pTargetPosition = { 0,0 };
 }
 
-void Movable::accelerate() {
-	this->pVelocity.x = this->pVelocity.x * acceleration + this->pTargetVelocity.x * (1 - acceleration);
-	this->pVelocity.y = this->pVelocity.y * acceleration + this->pTargetVelocity.y * (1 - acceleration);
+Vector f(Vector pos) {
+	return { 0, 0 };
 }
+
+void Movable::accelerate(double deltaTime) {
+
+	//std::cout << "v = " << pVelocity.str() << '\n';
+
+	pPosition += pVelocity * deltaTime + pAcceleration * deltaTime * deltaTime / 2.0;
+	pVelocity +=  (pAcceleration) * deltaTime / 2.0;
+
+
+	// LARP movement
+	//this->pVelocity.x = this->pVelocity.x * acceleration + this->pTargetVelocity.x * (1 - acceleration);
+	//this->pVelocity.y = this->pVelocity.y * acceleration + this->pTargetVelocity.y * (1 - acceleration);
+}
+
+
 
 void Movable::accelerateTowardsTarget() {
 	//printf("camera position: (%F, %F) \n", pPosition.x, pPosition.y);
@@ -62,22 +76,28 @@ void Movable::move() {
 	}
 }
 
+void Movable::jump(double startingVelocity) {
+	pVelocity.y = -startingVelocity;
+	printf("jumping \n");
+}
+
 void Movable::arrowDown(SDL_Event* e, double speed) {
 	switch (e->key.keysym.sym) {
-	case SDLK_UP:
-		this->pTargetVelocity.y = -speed;
-		break;
+	/*case SDLK_UP:
+		if(e->key.repeat == 0)
+			this->jump(jumpForce);
+		break;*/
 
-	case SDLK_DOWN:
+	/*case SDLK_DOWN:
 		this->pTargetVelocity.y = speed;
-		break;
+		break;*/
 
 	case SDLK_LEFT:
-		this->pTargetVelocity.x = -speed;
+		this->pVelocity.x = -speed;
 		break;
 
 	case SDLK_RIGHT:
-		this->pTargetVelocity.x = speed;
+		this->pVelocity.x = speed;
 		break;
 
 	default: break;
@@ -86,20 +106,20 @@ void Movable::arrowDown(SDL_Event* e, double speed) {
 
 void Movable::arrowUp(SDL_Event* e) {
 	switch (e->key.keysym.sym) {
-	case SDLK_UP:
+	/*case SDLK_UP:
 		this->pTargetVelocity.y = 0;
 		break;
 
 	case SDLK_DOWN:
 		this->pTargetVelocity.y = 0;
-		break;
+		break;*/
 
 	case SDLK_LEFT:
-		this->pTargetVelocity.x = 0;
+		this->pVelocity.x = 0;
 		break;
 
 	case SDLK_RIGHT:
-		this->pTargetVelocity.x = 0;
+		this->pVelocity.x = 0;
 		break;
 
 	default: break;
@@ -108,20 +128,21 @@ void Movable::arrowUp(SDL_Event* e) {
 
 void Movable::wsadDown(SDL_Event* e, double speed) {
 	switch (e->key.keysym.sym) {
-	case SDLK_w:
-		this->pTargetVelocity.y = -speed;
-		break;
+	/*case SDLK_w:
+		if (e->key.repeat == 0)
+			this->jump();
+		break;*/
 
-	case SDLK_s:
+	/*case SDLK_s:
 		this->pTargetVelocity.y = speed;
-		break;
+		break;*/
 
 	case SDLK_a:
-		this->pTargetVelocity.x = -speed;
+		this->pVelocity.x = -speed;
 		break;
 
 	case SDLK_d:
-		this->pTargetVelocity.x = speed;
+		this->pVelocity.x = speed;
 		break;
 
 	default: break;
@@ -130,20 +151,20 @@ void Movable::wsadDown(SDL_Event* e, double speed) {
 
 void Movable::wsadUp(SDL_Event* e) {
 	switch (e->key.keysym.sym) {
-	case SDLK_w:
+	/*case SDLK_w:
 		this->pTargetVelocity.y = 0;
 		break;
 
 	case SDLK_s:
 		this->pTargetVelocity.y = 0;
-		break;
+		break;*/
 
 	case SDLK_a:
-		this->pTargetVelocity.x = 0;
+		this->pVelocity.x = 0;
 		break;
 
 	case SDLK_d:
-		this->pTargetVelocity.x = 0;
+		this->pVelocity.x = 0;
 		break;
 
 	default: break;
@@ -162,8 +183,8 @@ void Movable::setTargetPosition(double x, double y) {
 	this->pTargetPosition.y = y;
 }
 
-void Movable::setAcceleration(double a) {
-	acceleration = a;
+void Movable::setAcceleration(double x, double y) {
+	pAcceleration = { x, y };
 }
 
 void Movable::setVelocity(double x, double y)

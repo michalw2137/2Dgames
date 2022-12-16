@@ -1,6 +1,7 @@
 #include <string>
 #include "ball.h"
 #include <sstream>
+#include <iostream>
 
 void Ball::resolveCollision(Ball* other)
 {
@@ -130,12 +131,22 @@ void Ball::resolveBoxCollision(Box* wall) {
             top < bottom ? v.y = -top : v.y = bottom;
 
             abs(v.x) < abs(v.y) ? v.y = 0 : v.x = 0;
+
+            if (v.x == 0)
+                this->setVelocityY(0);
         }
         else {
-            //printf("ball like collision \n");
+            printf("ball like collision \n");
 
             v.x = ((x - f.x) / distance) * (this->getRadius() - distance);
             v.y = ((y - f.y) / distance) * (this->getRadius() - distance);
+
+            //std::cout << "vX = " << v.x << "\n" << "vY = " << v.y << "\n";
+
+            //abs(v.x) < abs(v.y) ? v.y = 0 : v.x = 0;
+
+            //if (v.x == 0)
+            this->setVelocityY(0);
         }
 
         this->changePosition(v);
