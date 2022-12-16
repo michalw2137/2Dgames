@@ -1,4 +1,5 @@
 #include "globals.h"
+#include <stdlib.h>
 
 Vector gl::vector(Vector position1, Vector position2)
 {
@@ -55,3 +56,6 @@ double gl::angle(Vector target, Vector camera)
 	
 }
 
+int randInt(int start, int end) {
+	return rand() % end + start;
+}

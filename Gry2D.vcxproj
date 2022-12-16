@@ -145,6 +145,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="code\App.cpp" />
     <ClCompile Include="code\box.cpp" />
     <ClCompile Include="code\button.cpp" />
     <ClCompile Include="code\camera.cpp" />
@@ -159,6 +160,7 @@
     <ClCompile Include="code\texture.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="code\App.h" />
     <ClInclude Include="code\box.h" />
     <ClInclude Include="code\button.h" />
     <ClInclude Include="code\camera.h" />

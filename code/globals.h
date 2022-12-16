@@ -17,6 +17,7 @@ const int LEVELS = 3;
 //bool SEPARATE = false;
 //bool BOUNCE = false;
 
+int randInt(int start, int end);
 
 struct Vector {
 	double x, y;
