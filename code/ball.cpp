@@ -136,7 +136,7 @@ void Ball::resolveBoxCollision(Box* wall) {
                 this->setVelocityY(0);
         }
         else {
-            printf("ball like collision \n");
+            //printf("ball like collision \n");
 
             v.x = ((x - f.x) / distance) * (this->getRadius() - distance);
             v.y = ((y - f.y) / distance) * (this->getRadius() - distance);
