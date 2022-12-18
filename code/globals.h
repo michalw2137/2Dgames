@@ -13,7 +13,7 @@ const int WINDOW_WIDTH = 800;
 const int LEVEL_HEIGHT = 2400;
 const int LEVEL_WIDTH = 2400;
 
-const int LEVELS = 3;
+const int LEVELS = 1;
 
 //bool SEPARATE = false;
 //bool BOUNCE = false;

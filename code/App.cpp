@@ -22,17 +22,28 @@ static int currentLevel = -1;
 
 static int pointsBall = 0, pointsBox = 0;
 
-static double speed = 1;
 static int mouseX = 0, mouseY = 0;
 static bool mousePressed = false;
 static SDL_Event e;
 
-double jumpHeight = 0.01;
-double jumpTime = 2;
+static double speed = 0.3;
 
+double jumpHeight = 100; // 0.02;
+double jumpDistance = 100; // 0.2;
 
-double GRAVITY = 2 * jumpHeight / jumpTime / jumpTime;
-double STARTING_VELOCITY = 200 * jumpHeight / jumpTime;
+double STARTING_VELOCITY = 2 * jumpHeight * speed / jumpDistance;
+double GRAVITY = 2 * jumpHeight * speed * speed / jumpDistance / jumpDistance;
+
+// g = 0.001
+void recalculateV0_G() {
+	STARTING_VELOCITY = 2 * jumpHeight * speed / jumpDistance;
+	GRAVITY = 2 * jumpHeight * speed * speed / jumpDistance / jumpDistance;
+	printf("jumpHeight = %F\n", jumpHeight);
+	printf("jumpDistance = %F\n", jumpDistance);
+	printf("G = %F\n", GRAVITY);
+	printf("V0 = %F\n\n", STARTING_VELOCITY);
+
+}
 
 void App::setup() {
 	if (!loadTextures()) {
@@ -53,12 +64,16 @@ void App::setup() {
 	box.setAcceleration(0, GRAVITY);
 	ball.setAcceleration(0, GRAVITY);
 
+	box.setVelocity(0, 0);
+	ball.setVelocity(0, 0);
+
 	ball.setRadius(25);
 
 	target.size(30, 30);
 	target.getTexture()->setSize(50, 50);
 
 	resetLevel();
+	
 
 }
 
@@ -98,20 +113,50 @@ void App::loop() {
 			break;
 
 		case SDL_KEYDOWN:
-			if (e.key.keysym.sym == SDLK_UP && e.key.repeat == 0)
+			if (e.key.keysym.sym == SDLK_UP && e.key.repeat == 0 && box.canJump())
 				box.jump(STARTING_VELOCITY);
 
-			if (e.key.keysym.sym == SDLK_w && e.key.repeat == 0)
+			if (e.key.keysym.sym == SDLK_w && e.key.repeat == 0 && ball.canJump())
 				ball.jump(STARTING_VELOCITY);
 
-			box.arrowDown(&e, speed);
-			ball.wsadDown(&e, speed);
+			
+			if (e.key.keysym.sym == SDLK_KP_8) {
+				jumpHeight += 10;
+				recalculateV0_G();
+			}
+				
+
+			if (e.key.keysym.sym == SDLK_KP_2) {
+				jumpHeight -= 10;
+				recalculateV0_G();
+			}
+
+			if (e.key.keysym.sym == SDLK_KP_6) {
+				jumpDistance += 10;
+				recalculateV0_G();
+			}
+
+			if (e.key.keysym.sym == SDLK_KP_4) {
+				jumpDistance -= 10;
+				recalculateV0_G();
+			}
+
+			//if (!box.getAirborne()) {
+				box.arrowDown(&e, speed);
+			//}
+			//if (!ball.getAirborne()) {
+				ball.wsadDown(&e, speed);
+			//}
 
 			break;
 
 		case SDL_KEYUP:
-			box.arrowUp(&e);
-			ball.wsadUp(&e);
+			//if (!box.getAirborne()) {
+				box.arrowUp(&e);
+			//}
+			//if (!ball.getAirborne()) {
+				ball.wsadUp(&e);
+			//}
 
 			break;
 
@@ -122,6 +167,9 @@ void App::loop() {
 
 	box.accelerate(deltaTime);
 	ball.accelerate(deltaTime);
+
+	//std::cout << box.getPosition().str() << "\n";
+	//std::cout << box.getVelocity().str() << "\n\n";
 
 	//box.move(&camera);
 
@@ -247,7 +295,7 @@ bool App::loadTextures() {
 		return false;
 	}
 
-	if (!levels[0].loadLevelFromFile("levels/level1.txt", 16, 16)) {
+	if (!levels[0].loadLevelFromFile("levels/level.txt", 32, 21)) {
 		printf("Failed to load level.txt!\n");
 		return false;
 	}
@@ -256,7 +304,7 @@ bool App::loadTextures() {
 		return false;
 	}
 
-	if (!levels[1].loadLevelFromFile("levels/level2.txt", 20, 20)) {
+	/*if (!levels[1].loadLevelFromFile("levels/level2.txt", 20, 20)) {
 		printf("Failed to load level.txt!\n");
 		return false;
 	}
@@ -272,7 +320,7 @@ bool App::loadTextures() {
 	if (!levels[2].loadTextures()) {
 		printf("Failed to load some of the textures!\n");
 		return false;
-	}
+	}*/
 
 	return true;
 }
@@ -297,11 +345,15 @@ void App::resetLevel() {
 	}
 
 	level = levels[currentLevel];
-	setRandomPosition(&box);
-	setRandomPosition(&ball);
-	do {
+	//setRandomPosition(&box);
+	//setRandomPosition(&ball);
+	/*do {
 		setRandomPosition(&target);
-	} while (target.getPosition() == ball.getPosition() || target.getPosition() == box.getPosition());
+	} while (target.getPosition() == ball.getPosition() || target.getPosition() == box.getPosition());*/
+
+	box.setPosition(500, 500);
+	ball.setPosition(500, 500);
+	target.setPosition(3000, 500);
 
 	//CAMERA
 	camera.setScale(1);

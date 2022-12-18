@@ -65,7 +65,7 @@ bool initSDL(const char * windowName) {
 		return false;
 	}
 
-	gWindow = SDL_CreateWindow(windowName, 100, 100, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
+	gWindow = SDL_CreateWindow(windowName, 10, 30, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
 	if (gWindow == NULL) {
 		printf("Window could not be created! SDL Error: %s\n", SDL_GetError());
 		return false;

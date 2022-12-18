@@ -26,11 +26,14 @@ public:
 
 	void wsadUp(SDL_Event* e);
 
+	bool canJump();
 
 	//changers
 	void changePosition(Vector delta);
 
 	//setters
+	void setAirborne(bool airborne);
+
 	void setSize(Vector size);
 
 	void setSize(double x, double y);
@@ -44,6 +47,8 @@ public:
 	void setVelocity(double x, double y);
 
 	//getters
+	bool getAirborne();
+
 	Vector getSize();
 
 	Vector getPosition();
@@ -57,7 +62,7 @@ public:
 	double gravity = 3;
 
 private:
-
+	bool airborne = false;;
 	double acceleration;
 
 	Vector pSize;

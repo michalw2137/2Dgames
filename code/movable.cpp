@@ -29,11 +29,17 @@ Vector f(Vector pos) {
 }
 
 void Movable::accelerate(double deltaTime) {
-
-	//std::cout << "v = " << pVelocity.str() << '\n';
+	if (pVelocity.y == 0) {
+		airborne = false;
+	}
+	if (!airborne) {
+		//this->pVelocity.x = this->pVelocity.x * acceleration + this->pTargetVelocity.x * (1 - acceleration);
+		pVelocity.x = pTargetVelocity.x;
+	}
+	//std::cout << "airborne = " << airborne << '\n';
 
 	pPosition += pVelocity * deltaTime + pAcceleration * deltaTime * deltaTime / 2.0;
-	pVelocity +=  (pAcceleration) * deltaTime / 2.0;
+	pVelocity +=  (pAcceleration) * deltaTime;
 
 
 	// LARP movement
@@ -77,11 +83,25 @@ void Movable::move() {
 }
 
 void Movable::jump(double startingVelocity) {
+	/*if (airborne) {
+		return;
+	}*/
+	airborne = true;
 	pVelocity.y = -startingVelocity;
-	printf("jumping \n");
+	//printf("jumping \n");
+}
+
+bool Movable::canJump() {
+	return !airborne;
 }
 
 void Movable::arrowDown(SDL_Event* e, double speed) {
+	//if (abs(pVelocity.y) < 0.001) {
+	//	airborne = false;
+	//}
+	//if (airborne) {
+	//	return;
+	//}
 	switch (e->key.keysym.sym) {
 	/*case SDLK_UP:
 		if(e->key.repeat == 0)
@@ -93,11 +113,11 @@ void Movable::arrowDown(SDL_Event* e, double speed) {
 		break;*/
 
 	case SDLK_LEFT:
-		this->pVelocity.x = -speed;
+		this->pTargetVelocity.x = -speed;
 		break;
 
 	case SDLK_RIGHT:
-		this->pVelocity.x = speed;
+		this->pTargetVelocity.x = speed;
 		break;
 
 	default: break;
@@ -105,6 +125,9 @@ void Movable::arrowDown(SDL_Event* e, double speed) {
 }
 
 void Movable::arrowUp(SDL_Event* e) {
+	//if (airborne) {
+	//	return;
+	//}
 	switch (e->key.keysym.sym) {
 	/*case SDLK_UP:
 		this->pTargetVelocity.y = 0;
@@ -115,11 +138,11 @@ void Movable::arrowUp(SDL_Event* e) {
 		break;*/
 
 	case SDLK_LEFT:
-		this->pVelocity.x = 0;
+		this->pTargetVelocity.x = 0;
 		break;
 
 	case SDLK_RIGHT:
-		this->pVelocity.x = 0;
+		this->pTargetVelocity.x = 0;
 		break;
 
 	default: break;
@@ -127,6 +150,12 @@ void Movable::arrowUp(SDL_Event* e) {
 }
 
 void Movable::wsadDown(SDL_Event* e, double speed) {
+	//if (abs(pVelocity.y) < 0.001) {
+	//	airborne = false;
+	//}
+	//if (airborne) {
+	//	return;
+	//}
 	switch (e->key.keysym.sym) {
 	/*case SDLK_w:
 		if (e->key.repeat == 0)
@@ -138,11 +167,11 @@ void Movable::wsadDown(SDL_Event* e, double speed) {
 		break;*/
 
 	case SDLK_a:
-		this->pVelocity.x = -speed;
+		this->pTargetVelocity.x = -speed;
 		break;
 
 	case SDLK_d:
-		this->pVelocity.x = speed;
+		this->pTargetVelocity.x = speed;
 		break;
 
 	default: break;
@@ -150,6 +179,9 @@ void Movable::wsadDown(SDL_Event* e, double speed) {
 }
 
 void Movable::wsadUp(SDL_Event* e) {
+	//if (airborne) {
+	//	return;
+	//}
 	switch (e->key.keysym.sym) {
 	/*case SDLK_w:
 		this->pTargetVelocity.y = 0;
@@ -160,11 +192,11 @@ void Movable::wsadUp(SDL_Event* e) {
 		break;*/
 
 	case SDLK_a:
-		this->pVelocity.x = 0;
+		this->pTargetVelocity.x = 0;
 		break;
 
 	case SDLK_d:
-		this->pVelocity.x = 0;
+		this->pTargetVelocity.x = 0;
 		break;
 
 	default: break;
@@ -177,6 +209,9 @@ void Movable::changePosition(Vector delta)
 	this->pPosition.y += delta.y;
 }
 
+void Movable::setAirborne(bool airborne) {
+	this->airborne = airborne;
+}
 
 void Movable::setTargetPosition(double x, double y) {
 	this->pTargetPosition.x = x;
@@ -203,6 +238,10 @@ void Movable::setSize(Vector size) {
 void Movable::setSize(double x, double y) {
 	this->pSize.x = x;
 	this->pSize.y = y;
+}
+
+bool Movable::getAirborne() {
+	return this->airborne;
 }
 
 Vector Movable::getSize() {
