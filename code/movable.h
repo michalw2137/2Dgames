@@ -10,7 +10,7 @@ public:
 	~Movable();
 	void free();
 
-	void accelerate(double deltaTime);
+	void accelerate(double deltaTime, Vector gravity);
 
 	void accelerateTowardsTarget();
 

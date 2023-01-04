@@ -51,6 +51,11 @@ struct Vector {
 		return { x * a, y * a};
 	}
 
+	void operator*=(double a) {
+		x *= a;
+		y *= a;
+	}
+
 	Vector operator/(double b) {
 		if (b == 0) {
 			printf("DZIELENIE PRZEZ 0!! \n");

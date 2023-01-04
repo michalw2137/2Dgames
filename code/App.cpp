@@ -169,8 +169,8 @@ void App::loop() {
 	// LOGIC AND MOVEMENT		
 		//camera.isSeen(&box);
 
-	box.accelerate(deltaTime);
-	ball.accelerate(deltaTime);
+	box.accelerate(deltaTime, {0, GRAVITY});
+	ball.accelerate(deltaTime, {0, GRAVITY});
 
 	//std::cout << box.getPosition().str() << "\n";
 	//std::cout << box.getVelocity().str() << "\n\n";

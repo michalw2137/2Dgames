@@ -28,7 +28,7 @@ Vector f(Vector pos) {
 	return { 0, 0 };
 }
 
-void Movable::accelerate(double deltaTime) {
+void Movable::accelerate(double deltaTime, Vector gravity) {
 	if (pVelocity.y == 0) {
 		airborne = false;
 	}
@@ -36,10 +36,14 @@ void Movable::accelerate(double deltaTime) {
 		//this->pVelocity.x = this->pVelocity.x * acceleration + this->pTargetVelocity.x * (1 - acceleration);
 		pVelocity.x = pTargetVelocity.x;
 	}
+	if (pVelocity.y > 0.0001) {
+		printf("increasing gravity \n");
+		gravity *= 2;
+	}
 	//std::cout << "airborne = " << airborne << '\n';
 
-	pPosition += pVelocity * deltaTime + pAcceleration * deltaTime * deltaTime / 2.0;
-	pVelocity +=  (pAcceleration) * deltaTime;
+	pPosition += pVelocity * deltaTime + gravity * deltaTime * deltaTime / 2.0;
+	pVelocity +=  gravity * deltaTime;
 
 
 	// LARP movement
