@@ -31,7 +31,11 @@ public:
 	//changers
 	void changePosition(Vector delta);
 
+	void boost();
+
 	//setters
+	void setBoosted(bool boosted);
+
 	void setAirborne(bool airborne);
 
 	void setSize(Vector size);
@@ -62,9 +66,15 @@ public:
 	double gravity = 3;
 
 private:
-	bool airborne = false;
-	int jumpsLeft = 3;
 	double acceleration;
+	bool airborne = false;
+	bool isBoosted = false;
+
+	int jumpsLeft = 3;
+	int maxJumps = 3;
+
+	int boostFrames = 0;
+	int maxBoostFrames = 8;
 
 	Vector pSize;
 	Vector pPosition;

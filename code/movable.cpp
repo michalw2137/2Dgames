@@ -28,23 +28,38 @@ Vector f(Vector pos) {
 	return { 0, 0 };
 }
 
+void Movable::boost() {
+	if (!isBoosted) {
+		return;
+	}
+	if (boostFrames >= maxBoostFrames) {
+		return;
+	}
+	boostFrames++;
+	printf("increasing jump strength \n");
+}
+
 void Movable::accelerate(double deltaTime, Vector gravity) {
 	if (pVelocity.y == 0) {
 		airborne = false;
-		jumpsLeft = 3;
+		jumpsLeft = maxJumps;
 	}
 	if (!airborne) {
 		//this->pVelocity.x = this->pVelocity.x * acceleration + this->pTargetVelocity.x * (1 - acceleration);
 		pVelocity.x = pTargetVelocity.x;
 	}
+	Vector real_gravity;
 	if (pVelocity.y > 0.0001) {
-		printf("increasing gravity \n");
-		gravity *= 2;
+		//printf("increasing gravity \n");
+		real_gravity = {0, 3.*GRAVITY};
+	}
+	else {
+		real_gravity = { 0, GRAVITY };
 	}
 	//std::cout << "airborne = " << airborne << '\n';
 
-	pPosition += pVelocity * deltaTime + gravity * deltaTime * deltaTime / 2.0;
-	pVelocity +=  gravity * deltaTime;
+	pPosition += pVelocity * deltaTime + real_gravity * deltaTime * deltaTime / 2.0;
+	pVelocity += real_gravity * deltaTime;
 
 
 	// LARP movement
@@ -93,8 +108,10 @@ void Movable::jump(double startingVelocity) {
 	}*/
 	airborne = true;
 	jumpsLeft--;
-	pVelocity.y = -startingVelocity;
-	//printf("jumping \n");
+	pVelocity.y = -startingVelocity * (1 + boostFrames/maxBoostFrames/2.);
+	boostFrames = 0;
+	setBoosted(false);
+	printf("jumping \n");
 }
 
 bool Movable::canJump() {
@@ -213,6 +230,10 @@ void Movable::changePosition(Vector delta)
 {
 	this->pPosition.x += delta.x;
 	this->pPosition.y += delta.y;
+}
+
+void Movable::setBoosted(bool boosted) {
+	this->isBoosted = boosted;
 }
 
 void Movable::setAirborne(bool airborne) {

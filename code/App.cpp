@@ -117,18 +117,12 @@ void App::loop() {
 			break;
 
 		case SDL_KEYDOWN:
-			if (e.key.keysym.sym == SDLK_UP && e.key.repeat == 0 && box.canJump())
-				box.jump(STARTING_VELOCITY);
-
-			if (e.key.keysym.sym == SDLK_w && e.key.repeat == 0 && ball.canJump())
-				ball.jump(STARTING_VELOCITY);
-
-			
+					
 			if (e.key.keysym.sym == SDLK_KP_8) {
 				jumpHeight += 10;
 				recalculateV0_G();
 			}
-				
+			
 
 			if (e.key.keysym.sym == SDLK_KP_2) {
 				jumpHeight -= 10;
@@ -145,6 +139,12 @@ void App::loop() {
 				recalculateV0_G();
 			}
 
+			if (e.key.keysym.sym == SDLK_UP && box.canJump())
+				box.setBoosted(true);
+
+			if (e.key.keysym.sym == SDLK_w && ball.canJump())
+				ball.setBoosted(true);
+
 			//if (!box.getAirborne()) {
 				box.arrowDown(&e, speed);
 			//}
@@ -155,12 +155,17 @@ void App::loop() {
 			break;
 
 		case SDL_KEYUP:
-			//if (!box.getAirborne()) {
-				box.arrowUp(&e);
-			//}
-			//if (!ball.getAirborne()) {
-				ball.wsadUp(&e);
-			//}
+		//if (!box.getAirborne()) {
+			box.arrowUp(&e);
+		//}
+		//if (!ball.getAirborne()) {
+			ball.wsadUp(&e);
+		//}
+			if (e.key.keysym.sym == SDLK_UP && box.canJump())
+				box.jump(STARTING_VELOCITY);
+
+			if (e.key.keysym.sym == SDLK_w && ball.canJump())
+				ball.jump(STARTING_VELOCITY);
 
 			break;
 
@@ -168,6 +173,8 @@ void App::loop() {
 	}
 	// LOGIC AND MOVEMENT		
 		//camera.isSeen(&box);
+	box.boost();
+	ball.boost();
 
 	box.accelerate(deltaTime, {0, GRAVITY});
 	ball.accelerate(deltaTime, {0, GRAVITY});

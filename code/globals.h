@@ -5,6 +5,9 @@
 
 extern SDL_Renderer* gRenderer;
 
+extern double STARTING_VELOCITY;
+extern double GRAVITY;
+
 const int CIRCLES_COUNT = 10;
 
 const int WINDOW_HEIGHT = 800;
