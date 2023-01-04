@@ -306,7 +306,7 @@ bool App::loadTextures() {
 		return false;
 	}
 
-	if (!levels[0].loadLevelFromFile("levels/level.txt", 32, 21)) {
+	if (!levels[0].loadLevelFromFile("levels/level.txt", 52, 21)) {
 		printf("Failed to load level.txt!\n");
 		return false;
 	}
