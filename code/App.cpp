@@ -38,6 +38,10 @@ double GRAVITY = 2 * jumpHeight * speed * speed / jumpDistance / jumpDistance;
 void recalculateV0_G() {
 	STARTING_VELOCITY = 2 * jumpHeight * speed / jumpDistance;
 	GRAVITY = 2 * jumpHeight * speed * speed / jumpDistance / jumpDistance;
+
+	box.setAcceleration(0, GRAVITY);
+	ball.setAcceleration(0, GRAVITY);
+
 	printf("jumpHeight = %F\n", jumpHeight);
 	printf("jumpDistance = %F\n", jumpDistance);
 	printf("G = %F\n", GRAVITY);
