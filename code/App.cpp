@@ -261,12 +261,12 @@ void App::loop() {
 	box.render(&camera);
 	ball.render(&camera);
 
-	target.render(&camera);
+	//target.render(&camera);
 
-	if (!camera.isSeen(&target, false)) {
+	/*if (!camera.isSeen(&target, false)) {
 		arrow.setPosition(400, 400);
 		arrow.render(gl::angle(target.getPosition(), camera.getPosition()));
-	}
+	}*/
 
 	//printf("a\n");
 	screen.render();
@@ -355,8 +355,8 @@ void App::resetLevel() {
 		setRandomPosition(&target);
 	} while (target.getPosition() == ball.getPosition() || target.getPosition() == box.getPosition());*/
 
-	box.setPosition(500, 500);
-	ball.setPosition(500, 500);
+	box.setPosition(600, 300);
+	ball.setPosition(600, 250);
 	target.setPosition(3000, 500);
 
 	//CAMERA

@@ -62,7 +62,8 @@ public:
 	double gravity = 3;
 
 private:
-	bool airborne = false;;
+	bool airborne = false;
+	int jumpsLeft = 3;
 	double acceleration;
 
 	Vector pSize;

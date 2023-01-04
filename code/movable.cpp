@@ -31,6 +31,7 @@ Vector f(Vector pos) {
 void Movable::accelerate(double deltaTime, Vector gravity) {
 	if (pVelocity.y == 0) {
 		airborne = false;
+		jumpsLeft = 3;
 	}
 	if (!airborne) {
 		//this->pVelocity.x = this->pVelocity.x * acceleration + this->pTargetVelocity.x * (1 - acceleration);
@@ -91,12 +92,13 @@ void Movable::jump(double startingVelocity) {
 		return;
 	}*/
 	airborne = true;
+	jumpsLeft--;
 	pVelocity.y = -startingVelocity;
 	//printf("jumping \n");
 }
 
 bool Movable::canJump() {
-	return !airborne;
+	return jumpsLeft > 0;
 }
 
 void Movable::arrowDown(SDL_Event* e, double speed) {
