@@ -63,16 +63,6 @@ Texture* Sprite::getTexture()
 	return &this->texture;
 }
 
-void Sprite::changeX(double x)
-{
-	this->setPosition(this->getPosition().x + x, this->getPosition().y);
-}
-
-void Sprite::changeY(double y)
-{
-	this->setPosition(this->getPosition().x, this->getPosition().y + y);
-}
-
 double Sprite::distance(Sprite* other)
 {
 	double deltaX = this->getPosition().x - other->getPosition().x;

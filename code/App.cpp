@@ -33,13 +33,14 @@ static SDL_Event e;
 
 static double speed = 0.3;
 
-double jumpHeight = 100; // 0.02;
-double jumpDistance = 100; // 0.2;
+double jumpHeight = 100; 
+double jumpDistance = 100; 
 
 double STARTING_VELOCITY = 2 * jumpHeight * speed / jumpDistance;
 double GRAVITY = 2 * jumpHeight * speed * speed / jumpDistance / jumpDistance;
 
-// g = 0.001
+static Clock timer;
+
 void recalculateV0_G() {
 	STARTING_VELOCITY = 2 * jumpHeight * speed / jumpDistance;
 	GRAVITY = 2 * jumpHeight * speed * speed / jumpDistance / jumpDistance;
@@ -60,10 +61,10 @@ void App::setup() {
 		ball.loadTexture("textures/texture2.png");
 		target.loadTexture("textures/target.png");
 
-		levels[0].loadLevel("levels/level.txt", 52, 21);
-		//mountains.loadTexture("textures/mountains.png");
-		//clouds.loadTexture("textures/clouds.png");
-		//forest.loadTexture("textures/forest.png");
+		levels[0].loadLevel("levels/level.txt", 52, 11);
+		mountains.loadTexture("textures/mountains.png");
+		clouds.loadTexture("textures/clouds.png");
+		forest.loadTexture("textures/forest.png");
 	}
 	catch (std::string message) {
 		printf("%s", message.c_str());
@@ -92,25 +93,7 @@ void App::setup() {
 
 	resetLevel();
 	
-
 }
-
-struct Clock
-{
-	Uint64 NOW = SDL_GetPerformanceCounter();
-	Uint64 LAST = 0;
-	double deltaTime = 0;
-
-	double tick()
-	{
-		LAST = NOW;
-		NOW = SDL_GetPerformanceCounter();
-
-		deltaTime = (double)((NOW - LAST) * 1000 / (double)SDL_GetPerformanceFrequency());
-
-		return deltaTime;
-	}
-} timer;
 
 void App::loop() {
 	double deltaTime = timer.tick();
@@ -131,13 +114,11 @@ void App::loop() {
 			break;
 
 		case SDL_KEYDOWN:
-					
 			if (e.key.keysym.sym == SDLK_KP_8) {
 				jumpHeight += 10;
 				recalculateV0_G();
 			}
 			
-
 			if (e.key.keysym.sym == SDLK_KP_2) {
 				jumpHeight -= 10;
 				recalculateV0_G();
@@ -153,28 +134,21 @@ void App::loop() {
 				recalculateV0_G();
 			}
 
+			box.arrowDown(&e, speed);
+			ball.wsadDown(&e, speed);
+
 			if (e.key.keysym.sym == SDLK_UP && box.canJump())
 				box.setBoosted(true);
 
 			if (e.key.keysym.sym == SDLK_w && ball.canJump())
 				ball.setBoosted(true);
 
-			//if (!box.getAirborne()) {
-				box.arrowDown(&e, speed);
-			//}
-			//if (!ball.getAirborne()) {
-				ball.wsadDown(&e, speed);
-			//}
-
 			break;
 
 		case SDL_KEYUP:
-		//if (!box.getAirborne()) {
 			box.arrowUp(&e);
-		//}
-		//if (!ball.getAirborne()) {
 			ball.wsadUp(&e);
-		//}
+
 			if (e.key.keysym.sym == SDLK_UP && box.canJump())
 				box.jump(STARTING_VELOCITY);
 
@@ -186,43 +160,17 @@ void App::loop() {
 		}
 	}
 	// LOGIC AND MOVEMENT		
-		//camera.isSeen(&box);
 	box.boost();
 	ball.boost();
 
 	box.accelerate(deltaTime, {0, GRAVITY});
 	ball.accelerate(deltaTime, {0, GRAVITY});
 
-	//std::cout << box.getPosition().str() << "\n";
-	//std::cout << box.getVelocity().str() << "\n\n";
-
-	//box.move(&camera);
-
-	//ball.accelerate(deltaTime);
-	//ball.move(&camera);
-
-
-	/*if (camera.getScale() == 1) {
-		if (box.distance(&ball) > WINDOW_WIDTH) {
-			camera.setTargetScale(0.5);
-			printf("zooooooooooooooming out \n");
-		}
-		else {
-		}
-	}*/
-
-	/*if (camera.getScale() != camera.getTargetScale()) {
-		camera.zoom(0.1);
-	}
-	if (camera.getScale() == 0.5) {
-		camera.setScale(0.5);
-	}*/
 
 	level.resolveWallCollisions(&box);
 	level.resolveWallCollisions(&ball);
 
 	if (target.checkForCollision(&box)) {
-		//level = levels[target.getCurrentLevel()];
 		printf("point for box \n");
 		pointsBox++;
 
@@ -231,7 +179,6 @@ void App::loop() {
 		resetLevel();
 	}
 	else if (target.checkForCollision(&ball)) {
-		//level = levels[target.getCurrentLevel()];
 		printf("point for ball \n");
 		pointsBall++;
 
@@ -243,56 +190,32 @@ void App::loop() {
 		screen.emptyScreen();
 	}
 
-
 	// CAMERA
 	Vector pos = (box.getPosition() + ball.getPosition()) / 2.0;
 	//printf("%F, %F \n", camera.getSize().x / 2., camera.getSize().y / 2.);
 	camera.moveTo(pos.x - camera.getSize().x / 2.
-		, pos.y - camera.getSize().y / 2.
+		, pos.y - camera.getSize().y * 0.7
 	);
 
-	//if (!camera.isSeen(&box) ) {
-	//	printf("box isnt seen \n");
-	//}
-	////if (!camera.isSeen(&ball)) {
-	////	printf("ball isnt seen \n");
-	////}
-	//if (!camera.isSeen(&box) && camera.getScale() > 0.3) {
-	//	printf("box isnt seen \n");
-
-	//	camera.setScale(camera.getScale() - 0.05);
-
-	//	Vector pos = (box.getPosition() + ball.getPosition()) / 2.0;
-	//	camera.setPosition(pos.x, pos.y);
-
-	//}
-	//if (!camera.isSeen(&ball) && camera.getScale() > 0.3) {
-	//	printf("ball isnt seen \n");
-
-	//	camera.setScale(camera.getScale() - 0.05);
-
-	//	Vector pos = (box.getPosition() + ball.getPosition()) / 2.0;
-	//	camera.setPosition(pos.x, pos.y);
-	//}
 
 // RENDERING
 	SDL_RenderClear(gRenderer);
+
+	printf("camera delta = %s \n", camera.getDelta().str().c_str());
+	mountains.changeX(camera.getDelta().x * 0.3);
+	forest.changeX(camera.getDelta().x * 0.5);
+	clouds.changeX(camera.getDelta().x * 0.1);
+
+	mountains.render(&camera);
+	forest.render(&camera);
+	clouds.render(&camera);
+
 
 	level.renderLevel(&camera);
 
 	box.render(&camera);
 	ball.render(&camera);
 
-	//target.render(&camera);
-
-	/*if (!camera.isSeen(&target, false)) {
-		arrow.setPosition(400, 400);
-		arrow.render(gl::angle(target.getPosition(), camera.getPosition()));
-	}*/
-
-	//printf("a\n");
-	screen.render();
-	//printf("c\n");
 	SDL_RenderPresent(gRenderer);
 
 	Sleep(screen.getWait());
@@ -309,34 +232,6 @@ bool App::loadTextures() {
 		return false;
 	}
 	
-
-	//if (!levels[0].loadLevelFromFile("levels/level.txt", 52, 21)) {
-	//	printf("Failed to load level.txt!\n");
-	//	return false;
-	//}
-	//if (!levels[0].loadTextures()) {
-	//	printf("Failed to load some of the textures!\n");
-	//	return false;
-	//}
-
-	/*if (!levels[1].loadLevelFromFile("levels/level2.txt", 20, 20)) {
-		printf("Failed to load level.txt!\n");
-		return false;
-	}
-	if (!levels[1].loadTextures()) {
-		printf("Failed to load some of the textures!\n");
-		return false;
-	}
-
-	if (!levels[2].loadLevelFromFile("levels/level3.txt", 24, 24)) {
-		printf("Failed to load level.txt!\n");
-		return false;
-	}
-	if (!levels[2].loadTextures()) {
-		printf("Failed to load some of the textures!\n");
-		return false;
-	}*/
-
 	return true;
 }
 

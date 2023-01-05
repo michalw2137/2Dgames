@@ -229,6 +229,16 @@ void Movable::wsadUp(SDL_Event* e) {
 	}
 }
 
+void Movable::changeX(double delta)
+{
+	this->pPosition.x += delta;
+}
+
+void Movable::changeY(double delta)
+{
+	this->pPosition.y += delta;
+}
+
 void Movable::changePosition(Vector delta)
 {
 	this->pPosition.x += delta.x;

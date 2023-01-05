@@ -29,6 +29,10 @@ public:
 	bool canJump();
 
 	//changers
+	void changeX(double delta);
+
+	void changeY(double delta);
+
 	void changePosition(Vector delta);
 
 	void boost();

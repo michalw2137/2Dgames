@@ -25,7 +25,5 @@ private:
 	Texture temp;
 	Texture* text;
 	Texture texture;
-	void changeX(double x);
-	void changeY(double y);
 };
 

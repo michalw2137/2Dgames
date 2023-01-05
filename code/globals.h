@@ -23,6 +23,23 @@ const int LEVELS = 1;
 
 int randInt(int start, int end);
 
+struct Clock
+{
+	Uint64 NOW = SDL_GetPerformanceCounter();
+	Uint64 LAST = 0;
+	double deltaTime = 0;
+
+	double tick()
+	{
+		LAST = NOW;
+		NOW = SDL_GetPerformanceCounter();
+
+		deltaTime = (double)((NOW - LAST) * 1000 / (double)SDL_GetPerformanceFrequency());
+
+		return deltaTime;
+	}
+};
+
 struct Vector {
 	double x, y;
 

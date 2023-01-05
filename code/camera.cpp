@@ -39,9 +39,6 @@ void Camera::moveTo(double x, double y) {
 	lastPosition = getPosition();
 	this->setPosition(x, y);
 	deltaPosition = lastPosition - getPosition();
-	if (deltaPosition != Vector(0,0)) {
-		printf("camera delta position = %s \n", deltaPosition.str().c_str());
-	}
 }
 
 double Camera::getScale() {
@@ -60,6 +57,11 @@ double Camera::getHalfHeight()
 double Camera::getHalfWidth()
 {
 	return this->getSize().x / 2.0;
+}
+
+Vector Camera::getDelta()
+{
+	return deltaPosition;
 }
 
 bool Camera::isSeen(Movable* object, bool print)

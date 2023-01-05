@@ -20,6 +20,8 @@ public:
 	double getHalfHeight();
 	double getHalfWidth();
 
+	Vector getDelta();
+
 	bool isSeen(Movable* sprite, bool print = false);
 private:
 	Vector lastPosition = {0,0};
