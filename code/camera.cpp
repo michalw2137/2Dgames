@@ -39,7 +39,9 @@ void Camera::moveTo(double x, double y) {
 	lastPosition = getPosition();
 	this->setPosition(x, y);
 	deltaPosition = lastPosition - getPosition();
-	printf("camera delta position = %s \n", deltaPosition.str().c_str());
+	if (deltaPosition != Vector(0,0)) {
+		printf("camera delta position = %s \n", deltaPosition.str().c_str());
+	}
 }
 
 double Camera::getScale() {

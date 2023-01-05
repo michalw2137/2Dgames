@@ -16,9 +16,7 @@ public:
 	~Level();
 	void free();
 
-	bool loadLevelFromFile(std::string path, int width, int height);
-
-	bool loadTextures();
+	void loadLevel(std::string path, int width, int height);
 
 	void renderLevel(Camera* camera);
 
@@ -31,6 +29,9 @@ public:
 	int getWidth();
 
 private:
+	bool loadLevelFromFile(std::string path, int width, int height);
+	bool loadTextures();
+
 	int width, height;
 
 	std::vector<Box> walls;

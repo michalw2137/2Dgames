@@ -1,8 +1,13 @@
 #include "sprite.h"
 #include <string>
 
-bool Sprite::loadTexture(std::string path) {
-	return this->texture.loadFromFile(path);
+void Sprite::loadTexture(std::string path) {
+	bool success = this->texture.loadFromFile(path);
+	if (success) {
+		return;
+	}
+	//printf("%s couldnt be loaded! \n", path.c_str());
+	throw path + " couldnt be loaded!\n";
 }
 
 void Sprite::setTexture(Texture* texture) {

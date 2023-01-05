@@ -11,6 +11,11 @@ static Ball ball;
 
 static Target target;
 
+static Sprite mountains;
+static Sprite forest;
+static Sprite clouds;
+
+
 static Level level;
 static Level levels[LEVELS];
 
@@ -50,9 +55,18 @@ void recalculateV0_G() {
 }
 
 void App::setup() {
-	if (!loadTextures()) {
-		printf("Failed to load textures! \n");
-		std::getchar();
+	try {
+		box.loadTexture("textures/texture1.png");
+		ball.loadTexture("textures/texture2.png");
+		target.loadTexture("textures/target.png");
+
+		levels[0].loadLevel("levels/level.txt", 52, 21);
+		//mountains.loadTexture("textures/mountains.png");
+		//clouds.loadTexture("textures/clouds.png");
+		//forest.loadTexture("textures/forest.png");
+	}
+	catch (std::string message) {
+		printf("%s", message.c_str());
 		throw("Failed to load textures");
 	}
 
@@ -294,27 +308,16 @@ bool App::loadTextures() {
 		printf("Failed to load screens!\n");
 		return false;
 	}
-	if (!box.loadTexture("textures/texture1.png")) {
-		printf("Failed to load texture1.png!\n");
-		return false;
-	}
-	if (!ball.loadTexture("textures/texture2.png")) {
-		printf("Failed to load texture2.png!\n");
-		return false;
-	}
-	if (!target.loadTexture("textures/target.png")) {
-		printf("Failed to load target.png!\n");
-		return false;
-	}
+	
 
-	if (!levels[0].loadLevelFromFile("levels/level.txt", 52, 21)) {
-		printf("Failed to load level.txt!\n");
-		return false;
-	}
-	if (!levels[0].loadTextures()) {
-		printf("Failed to load some of the textures!\n");
-		return false;
-	}
+	//if (!levels[0].loadLevelFromFile("levels/level.txt", 52, 21)) {
+	//	printf("Failed to load level.txt!\n");
+	//	return false;
+	//}
+	//if (!levels[0].loadTextures()) {
+	//	printf("Failed to load some of the textures!\n");
+	//	return false;
+	//}
 
 	/*if (!levels[1].loadLevelFromFile("levels/level2.txt", 20, 20)) {
 		printf("Failed to load level.txt!\n");

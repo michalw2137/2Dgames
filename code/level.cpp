@@ -21,6 +21,17 @@ void Level::free() {
 
 }
 
+void Level::loadLevel(std::string path, int width, int height) {
+	bool file = loadLevelFromFile(path, width, height);
+	bool textures = loadTextures();
+	if (!file) {
+		throw "failed to load level layout from " + path;
+	}
+	if (!textures) {
+		throw "failed to load tile textures \n";
+	}
+}
+
 bool Level::loadLevelFromFile(std::string path, int width, int height) {
 	this->width = width;
 	this->height = height;
@@ -107,7 +118,7 @@ void Level::renderLevel(Camera* camera) {
 				textures[TEXTURES_AIR].render(x, y, camera);
 				break;
 
-			case 'v':
+			case ' ':
 				break;
 
 			case '\n':

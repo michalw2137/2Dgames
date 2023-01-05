@@ -36,22 +36,22 @@ int main(int argc, char* args[]) {
 	}
 
 
-	printf("loaded succesfully! \n");
+	printf("SDL loaded \n");
 
 	try {
 		App::setup();
 	}
 	catch (const char* message) {
-		std::cout << "Failed to setup App, message: " << message << "\n";
+		std::cout << "Failed to setup App: " << message << "\n";
+		return FAIL;
 	}
-	
 
 	while (true) {
 		try {
 			App::loop();
 		}
 		catch (const char* message) {
-			std::cout << "Loop stopped, message: " << message << "\n";
+			std::cout << "Loop stopped: " << message << "\n";
 			break;
 		}	
 	}

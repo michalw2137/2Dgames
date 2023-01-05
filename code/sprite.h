@@ -8,7 +8,7 @@
 class Sprite: public Movable {
 
 public:
-	bool loadTexture(std::string path);
+	void loadTexture(std::string path);
 	void render(Camera* camera);
 	void move(Camera* camera);
 

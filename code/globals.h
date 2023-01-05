@@ -26,6 +26,15 @@ int randInt(int start, int end);
 struct Vector {
 	double x, y;
 
+	Vector() {
+		x = 0, y = 0;
+	}
+
+	Vector(double x, double y) {
+		this->x = x;
+		this->y = y;
+	}
+
 	std::string str() {
 		std::stringstream ss;
 		ss << "[" << x << ", " << y << "]";
@@ -40,6 +49,12 @@ struct Vector {
 			return false;
 		}
 	}
+
+	bool operator!=(Vector a) {
+		return !(Vector(x, y) == a);
+	}
+
+	
 
 	Vector operator+(Vector b) {
 		return { x + b.x, y + b.y };
