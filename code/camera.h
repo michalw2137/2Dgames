@@ -11,6 +11,9 @@ public:
 	void setScale(double scale);
 	void setTargetScale(double scale);
 	void zoom(double speed);
+
+	void moveTo(double x, double y);
+
 	double getScale();
 	double getTargetScale();
 
@@ -19,6 +22,8 @@ public:
 
 	bool isSeen(Movable* sprite, bool print = false);
 private:
+	Vector lastPosition = {0,0};
+	Vector deltaPosition = {0,0};
 	double scale;
 	double targetScale;
 	void setX(double x);

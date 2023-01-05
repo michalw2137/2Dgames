@@ -48,6 +48,9 @@ void Movable::accelerate(double deltaTime, Vector gravity) {
 		//this->pVelocity.x = this->pVelocity.x * acceleration + this->pTargetVelocity.x * (1 - acceleration);
 		pVelocity.x = pTargetVelocity.x;
 	}
+	if (deltaTime > 60) {
+		deltaTime = 60;
+	}
 	Vector real_gravity;
 	if (pVelocity.y > 0.0001) {
 		//printf("increasing gravity \n");

@@ -45,9 +45,18 @@ struct Vector {
 		return { x + b.x, y + b.y };
 	}
 
+	Vector operator-(Vector b) {
+		return { x - b.x, y - b.y };
+	}
+
 	void operator+=(Vector b) {
 		x += b.x;
 		y += b.y;
+	}
+
+	void operator-=(Vector b) {
+		x -= b.x;
+		y -= b.y;
 	}
 
 	Vector operator*(double a) {

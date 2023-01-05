@@ -12,12 +12,12 @@ Camera::~Camera() {
 
 void Camera::setX(double x)
 {
-	this->setPosition(x, this->getPosition().y);
+	this->moveTo(x, this->getPosition().y);
 }
 
 void Camera::setY(double y)
 {
-	this->setPosition(this->getPosition().x, y);
+	this->moveTo(this->getPosition().x, y);
 }
 
 
@@ -33,6 +33,13 @@ void Camera::setTargetScale(double scale) {
 
 void Camera::zoom(double speed) {
 	this->scale = (scale*(1. - speed) + targetScale * speed);
+}
+
+void Camera::moveTo(double x, double y) {
+	lastPosition = getPosition();
+	this->setPosition(x, y);
+	deltaPosition = lastPosition - getPosition();
+	printf("camera delta position = %s \n", deltaPosition.str().c_str());
 }
 
 double Camera::getScale() {

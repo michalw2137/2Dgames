@@ -233,9 +233,10 @@ void App::loop() {
 	// CAMERA
 	Vector pos = (box.getPosition() + ball.getPosition()) / 2.0;
 	//printf("%F, %F \n", camera.getSize().x / 2., camera.getSize().y / 2.);
-	camera.setPosition(pos.x - camera.getSize().x / 2.
+	camera.moveTo(pos.x - camera.getSize().x / 2.
 		, pos.y - camera.getSize().y / 2.
 	);
+
 	//if (!camera.isSeen(&box) ) {
 	//	printf("box isnt seen \n");
 	//}
@@ -368,7 +369,7 @@ void App::resetLevel() {
 
 	//CAMERA
 	camera.setScale(1);
-	camera.setPosition(level.getWidth() * 25 - camera.getSize().x / 2., level.getHeight() * 25 - camera.getSize().y / 2.);
+	camera.moveTo(level.getWidth() * 25 - camera.getSize().x / 2., level.getHeight() * 25 - camera.getSize().y / 2.);
 
 }
 
