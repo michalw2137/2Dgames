@@ -174,10 +174,13 @@
     <ClInclude Include="code\texture.h" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="levels\clouds.txt" />
     <Text Include="levels\level.txt" />
     <Text Include="levels\level1.txt" />
     <Text Include="levels\level2.txt" />
     <Text Include="levels\level3.txt" />
+    <Text Include="levels\mountains.txt" />
+    <Text Include="levels\trees.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

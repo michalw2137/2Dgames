@@ -86,8 +86,9 @@ void Movable::move() {
 	this->pPosition.x += this->pVelocity.x;
 
 	//If the dot went too far to the left or right
-	if ((this->pPosition.x < 0) ||
-		(this->pPosition.x + this->pSize.x > LEVEL_WIDTH))
+	if ((this->pPosition.x < 0) 
+		//|| (this->pPosition.x + this->pSize.x > LEVEL_WIDTH)
+		)
 	{
 		//Move back
 		this->pPosition.x -= this->pVelocity.x;
@@ -97,8 +98,9 @@ void Movable::move() {
 	this->pPosition.y += this->pVelocity.y;
 
 	//If the dot went too far up or down
-	if ((this->pPosition.y < 0) ||
-		(this->pPosition.y + this->pSize.y > LEVEL_WIDTH))
+	if ((this->pPosition.y < 0) 
+		//|| (this->pPosition.y + this->pSize.y > LEVEL_WIDTH)
+		)
 	{
 		//Move back
 		this->pPosition.y -= this->pVelocity.y;

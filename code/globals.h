@@ -13,9 +13,6 @@ const int CIRCLES_COUNT = 10;
 const int WINDOW_HEIGHT = 800;
 const int WINDOW_WIDTH = 800;
 
-const int LEVEL_HEIGHT = 2400;
-const int LEVEL_WIDTH = 2400;
-
 const int LEVELS = 1;
 
 //bool SEPARATE = false;
@@ -121,7 +118,7 @@ namespace gl {
 
 
 
-const SDL_Color BACKGROUND_COLOR = { 0x00, 0x00, 0x00, 0xFF };
+const SDL_Color BACKGROUND_COLOR = { 0x0A, 0xC0, 0xFF, 0xFF };
 
 enum codes {
 	FAIL = -1,
@@ -134,5 +131,14 @@ enum Textures {
 	TEXTURES_STONE,
 	TEXTURES_BRICK,
 	TEXTURES_FIRE,
+
+	TEXTURES_GROUND,
+	TEXTURES_TREE,
+	TEXTURES_TREE_TOP,
+	TEXTURES_LEFT_SLOPE,
+	TEXTURES_MIDDLE,
+	TEXTURES_RIGHT_SLOPE,
+	TEXTURES_CLOUD,
+
 	TEXTURES_SIZE
 };

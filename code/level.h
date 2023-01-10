@@ -22,7 +22,8 @@ public:
 
 	void resolveWallCollisions(Ball* ball);
 	void resolveWallCollisions(Box* box);
-	
+	void changeX(double x);
+
 	bool touchesWall(Vector position);
 
 	int getHeight();
@@ -31,6 +32,8 @@ public:
 private:
 	bool loadLevelFromFile(std::string path, int width, int height);
 	bool loadTextures();
+
+	Vector offset = { 0,0 };
 
 	int width, height;
 
@@ -44,7 +47,15 @@ private:
 		"textures/air.png",
 		"textures/stone.png",
 		"textures/brick.png",
-		"textures/fire.png"
+		"textures/fire.png",
+
+		"textures/ground.png",
+		"textures/tree.png",
+		"textures/tree_top.png",
+		"textures/left_slope.png",
+		"textures/middle.png",
+		"textures/right_slope.png",
+		"textures/cloud.png",
 	};
 
 };

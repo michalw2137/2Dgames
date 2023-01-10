@@ -11,12 +11,11 @@ static Ball ball;
 
 static Target target;
 
-static Sprite mountains;
-static Sprite forest;
-static Sprite clouds;
-
-
 static Level level;
+static Level mountains;
+static Level clouds;
+static Level trees;
+
 static Level levels[LEVELS];
 
 static Screen screen;
@@ -61,10 +60,11 @@ void App::setup() {
 		ball.loadTexture("textures/texture2.png");
 		target.loadTexture("textures/target.png");
 
-		levels[0].loadLevel("levels/level.txt", 52, 11);
-		mountains.loadTexture("textures/mountains.png");
-		clouds.loadTexture("textures/clouds.png");
-		forest.loadTexture("textures/forest.png");
+		levels[0].loadLevel("levels/level.txt", 52, 14);
+		clouds.loadLevel("levels/clouds.txt", 52, 14);
+		mountains.loadLevel("levels/mountains.txt", 52, 14);
+		trees.loadLevel("levels/trees.txt", 52, 14);
+
 	}
 	catch (std::string message) {
 		printf("%s", message.c_str());
@@ -194,21 +194,20 @@ void App::loop() {
 	Vector pos = (box.getPosition() + ball.getPosition()) / 2.0;
 	//printf("%F, %F \n", camera.getSize().x / 2., camera.getSize().y / 2.);
 	camera.moveTo(pos.x - camera.getSize().x / 2.
-		, pos.y - camera.getSize().y * 0.7
+		, pos.y - camera.getSize().y * 0.75
 	);
-
 
 // RENDERING
 	SDL_RenderClear(gRenderer);
 
 	printf("camera delta = %s \n", camera.getDelta().str().c_str());
-	mountains.changeX(camera.getDelta().x * 0.3);
-	forest.changeX(camera.getDelta().x * 0.5);
-	clouds.changeX(camera.getDelta().x * 0.1);
+	mountains.changeX(camera.getDelta().x * 0.15);
+	trees.changeX(camera.getDelta().x * 0.3);
+	clouds.changeX(camera.getDelta().x * 0.05);
 
-	mountains.render(&camera);
-	forest.render(&camera);
-	clouds.render(&camera);
+	mountains.renderLevel(&camera);
+	trees.renderLevel(&camera);
+	clouds.renderLevel(&camera);
 
 
 	level.renderLevel(&camera);

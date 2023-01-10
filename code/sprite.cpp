@@ -30,8 +30,9 @@ void Sprite::move(Camera* camera){
 	this->changeX(this->getVelocity().x);
 
 	//If the dot went too far to the left or right
-	if ((this->getPosition().x < 0) ||
-		(this->getPosition().x + this->getSize().x > LEVEL_WIDTH))
+	if ((this->getPosition().x < 0) 
+		//|| (this->getPosition().x + this->getSize().x > LEVEL_WIDTH)
+		)
 	{
 		//Move back
 		printf("going back from edge \n");
@@ -43,8 +44,9 @@ void Sprite::move(Camera* camera){
 	this->changeY(this->getVelocity().y);
 
 	//If the dot went too far up or down
-	if ((this->getPosition().y < 0) ||
-		(this->getPosition().y + this->getSize().y > LEVEL_WIDTH))
+	if ((this->getPosition().y < 0) 
+		//|| (this->getPosition().y + this->getSize().y > LEVEL_WIDTH)
+		)
 	{
 		//Move back
 		this->changeY(-this->getVelocity().y);

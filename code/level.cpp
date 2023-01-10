@@ -70,7 +70,8 @@ bool Level::loadTextures() {
 				i++;
 			}
 
-			if (this->layout.at(i) == 'x') {
+			if (this->layout.at(i) == 'x' ||
+				this->layout.at(i) == '#') {
 				//printf("wall at %d, %d\n", x, y);
 				Box wall;
 				wall.setPosition(x, y);
@@ -97,29 +98,58 @@ void Level::renderLevel(Camera* camera) {
 
 			switch (this->layout.at(i)) {
 			case 'f':
-				textures[TEXTURES_FIRE].render(x, y, camera);
+				textures[TEXTURES_FIRE].render(x + offset.x, y, camera);
 				break;
 
 			case 'x':
-				textures[TEXTURES_STONE].render(x, y, camera);
+				textures[TEXTURES_STONE].render(x + offset.x, y, camera);
 				break;
 
 			case 'b':
-				textures[TEXTURES_BRICK].render(x, y, camera);
+				textures[TEXTURES_BRICK].render(x + offset.x, y, camera);
 				break;
 
-			case 'w':
-				textures[TEXTURES_WATER].render(x, y, camera);
-				break;
-
-			case '.':
-				//textures[TEXTURES_AIR].setAlpha(255 / 2);
-
-				textures[TEXTURES_AIR].render(x, y, camera);
+			case '_':
+				textures[TEXTURES_WATER].render(x + offset.x, y, camera);
 				break;
 
 			case ' ':
+				textures[TEXTURES_AIR].setAlpha(0);
+				textures[TEXTURES_AIR].render(x + offset.x, y, camera);
 				break;
+
+			case '#':
+				textures[TEXTURES_GROUND].render(x + offset.x, y, camera);
+				break;
+
+			case '/':
+				textures[TEXTURES_LEFT_SLOPE].render(x + offset.x, y, camera);
+				break;
+
+			case '-':
+				textures[TEXTURES_MIDDLE].render(x + offset.x, y, camera);
+				break;
+
+			case '\\':
+				textures[TEXTURES_RIGHT_SLOPE].render(x + offset.x, y, camera);
+				break;
+
+			case 'o':
+				textures[TEXTURES_CLOUD].render(x + offset.x, y, camera);
+				break;
+
+			case '^':
+				textures[TEXTURES_TREE_TOP].render(x + offset.x, y, camera);
+				break;
+
+			case 'w':
+				textures[TEXTURES_TREE].render(x + offset.x, y, camera);
+				break;
+
+			case '.':
+				break;
+
+		
 
 			case '\n':
 				break;
@@ -140,6 +170,11 @@ void Level::resolveWallCollisions(Box* box) {
 		box->resolveBoxCollision(&wall);
 	}
 	//printf("all walls \n\n");
+}
+
+void Level::changeX(double x)
+{
+	offset.x += x;
 }
 
 void Level::resolveWallCollisions(Ball* ball) {

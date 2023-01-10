@@ -106,5 +106,14 @@
     <Text Include="levels\level1.txt">
       <Filter>Pliki zasobów</Filter>
     </Text>
+    <Text Include="levels\trees.txt">
+      <Filter>Pliki zasobów</Filter>
+    </Text>
+    <Text Include="levels\mountains.txt">
+      <Filter>Pliki zasobów</Filter>
+    </Text>
+    <Text Include="levels\clouds.txt">
+      <Filter>Pliki zasobów</Filter>
+    </Text>
   </ItemGroup>
 </Project>
