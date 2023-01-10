@@ -18,6 +18,10 @@
 #include <iostream>
 #include "App.h"
 
+
+#include "imgui.h"
+#include "imgui_impl_sdl.h"
+
 SDL_Window* gWindow = NULL;
 SDL_Renderer* gRenderer = NULL;
 
@@ -34,9 +38,13 @@ int main(int argc, char* args[]) {
 		std::getchar();
 		return FAIL;
 	}
-
-
 	printf("SDL loaded \n");
+
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	ImGui::StyleColorsDark();
+	ImGui_ImplSDL2_InitForSDLRenderer(gWindow, gRenderer);
 
 	try {
 		App::setup();
@@ -47,6 +55,8 @@ int main(int argc, char* args[]) {
 	}
 
 	while (true) {
+		
+
 		try {
 			App::loop();
 		}
@@ -54,6 +64,7 @@ int main(int argc, char* args[]) {
 			std::cout << "Loop stopped: " << message << "\n";
 			break;
 		}	
+		
 	}
 	clean();
 	return SUCCESS;

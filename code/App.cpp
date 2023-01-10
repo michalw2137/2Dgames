@@ -4,6 +4,7 @@
 #include <windows.h>
 #include <iostream>
 
+
 static Camera camera;
 
 static Box box;
@@ -15,6 +16,10 @@ static Level level;
 static Level mountains;
 static Level clouds;
 static Level trees;
+
+static double mountainsSpeed = 0.15;
+static double treesSpeed = 0.3;
+static double cloudsSpeed = 0.05;
 
 static Level levels[LEVELS];
 
@@ -52,6 +57,12 @@ void recalculateV0_G() {
 	printf("G = %F\n", GRAVITY);
 	printf("V0 = %F\n\n", STARTING_VELOCITY);
 
+}
+
+void printBackgroundSpeeds() {
+	printf("trees multiplyer = %F\n", treesSpeed);
+	printf("clouds multiplyer = %F\n", cloudsSpeed);
+	printf("mountains multiplyer = %F\n\n", mountainsSpeed);
 }
 
 void App::setup() {
@@ -134,6 +145,34 @@ void App::loop() {
 				recalculateV0_G();
 			}
 
+
+			if (e.key.keysym.sym == SDLK_h) {
+				treesSpeed -= 0.1;
+				printBackgroundSpeeds();
+			}
+			if (e.key.keysym.sym == SDLK_y) {
+				treesSpeed += 0.1;
+				printBackgroundSpeeds();
+			}
+
+			if (e.key.keysym.sym == SDLK_j) {
+				mountainsSpeed -= 0.1;
+				printBackgroundSpeeds();
+			}
+			if (e.key.keysym.sym == SDLK_u) {
+				mountainsSpeed += 0.1;
+				printBackgroundSpeeds();
+			}
+
+			if (e.key.keysym.sym == SDLK_k) {
+				cloudsSpeed -= 0.1;
+				printBackgroundSpeeds();
+			}
+			if (e.key.keysym.sym == SDLK_i) {
+				cloudsSpeed += 0.1;
+				printBackgroundSpeeds();
+			}
+
 			box.arrowDown(&e, speed);
 			ball.wsadDown(&e, speed);
 
@@ -200,10 +239,10 @@ void App::loop() {
 // RENDERING
 	SDL_RenderClear(gRenderer);
 
-	printf("camera delta = %s \n", camera.getDelta().str().c_str());
-	mountains.changeX(camera.getDelta().x * 0.15);
-	trees.changeX(camera.getDelta().x * 0.3);
-	clouds.changeX(camera.getDelta().x * 0.05);
+	//printf("camera delta = %s \n", camera.getDelta().str().c_str());
+	mountains.changeX(camera.getDelta().x * mountainsSpeed);
+	trees.changeX(camera.getDelta().x * treesSpeed);
+	clouds.changeX(camera.getDelta().x * cloudsSpeed);
 
 	mountains.renderLevel(&camera);
 	trees.renderLevel(&camera);
